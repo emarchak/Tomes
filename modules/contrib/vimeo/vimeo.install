@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file
+ * Install file for Vimeo.
+ */
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function vimeo_uninstall() {
+  // Delete variables stored in the DB
+  // TODO Please review the conversion of this statement to the D7 database API syntax.
+  /* db_query("DELETE FROM {variable} WHERE name LIKE 'vimeo%'") */
+  db_delete('variable')
+  ->condition('name', 'vimeo%', 'LIKE')
+  ->execute();
+}
+
+function vimeo_schema() {
+  $schema['vimeo_sources'] = array(
+    'fields' => array(
+      'sid' => array(
+        'description' => 'The primary identifier for a Vimeo source.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE),
+      'vid' => array(
+        'description' => 'The Vimeo identifier for a Vimeo source.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => ''),
+      'type' => array(
+        'description' => 'The Vimeo identifier for a Vimeo source.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => ''),
+      'name' => array(
+        'description' => 'The name of an mp3 player.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => ''),
+    ),
+    'primary key' => array('sid'),
+  );
+
+  $schema['cache_vimeo_sources'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_vimeo_videos'] = drupal_get_schema_unprocessed('system', 'cache');
+
+  return $schema;
+}

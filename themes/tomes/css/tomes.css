@@ -8,14 +8,32 @@
  * as well.
  */
 
-
 /**
  * @fontface settings
  */
-#page-title,
+.tomes #page-title,
 .tomes #site-name a {
   font-family: 'DeutschGothicNormal';
   letter-spacing: .05em
+}
+.tomes #page-title {
+  font-size: 3em;
+  text-align: center;
+}
+
+* {
+  color: #5e412f;
+}
+
+* a:link,
+* a:visited {
+  color: #78C0A8;
+}
+
+* a:hover,
+* a:active {
+  color: #5e412f;
+  text-decoration: underline;
 }
 
 
@@ -25,7 +43,7 @@
  
  
 .tomes #site-name a {
-  color: white;
+  color: #fefce4;
   text-align: center;
   font-size: 2em;
 }
@@ -41,32 +59,37 @@
   text-shadow: 1px 1px 5px #333;
 } 
 
+
 #columns {
-    -webkit-box-shadow:1px 1px 2px #666;
-    -moz-box-shadow: 1px 1px 2px #666;
-  box-shadow:1px 1px 2px #666;
-  border:1px solid #ddd;
+  background: transparent url(../dropbg.png) no-repeat bottom center;
+  padding-bottom: 0.5em;
 }
 
+#columns .columns-inner{
+  border:1px solid #fefce4;
+  background-color:#fefce4;
+}
 
 /**
  * Navigation
  */
+ 
 #menu-bar .menu-wrapper li a.active,
+#menu-bar .menu-wrapper li a.active:hover,
 #menu-bar .menu-wrapper li a:hover {
-  background-color: #fff;
+  background-color: #fefce4;
+  text-decoration: none;
   color: #000;
   box-shadow: 0 0 0 transparent;
 }
 
 #menu-bar .menu-wrapper li a {
   box-shadow: 0 -1px 2px #bbb inset;
-  background-color: #ddd;
+  background-color: #fcf2d1;
   color: #666;
   border-top:1px solid #eee;
-  border-bottom:1px solid #fff;
 }
 
 #menu-bar, #menu-bar .menu-wrapper {
- margin-bottom: -1px;
+
 }

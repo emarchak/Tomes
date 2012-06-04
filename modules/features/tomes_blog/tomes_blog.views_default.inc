@@ -52,11 +52,6 @@ function tomes_blog_views_default_views() {
   $handler->display->display_options['fields']['title']['hide_empty'] = 0;
   $handler->display->display_options['fields']['title']['empty_zero'] = 0;
   $handler->display->display_options['fields']['title']['link_to_node'] = 1;
-  /* Sort criterion: Content: Post date */
-  $handler->display->display_options['sorts']['created']['id'] = 'created';
-  $handler->display->display_options['sorts']['created']['table'] = 'node';
-  $handler->display->display_options['sorts']['created']['field'] = 'created';
-  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   /* Filter criterion: Content: Published */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
@@ -74,6 +69,15 @@ function tomes_blog_views_default_views() {
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: View area */
+  $handler->display->display_options['header']['view']['id'] = 'view';
+  $handler->display->display_options['header']['view']['table'] = 'views';
+  $handler->display->display_options['header']['view']['field'] = 'view';
+  $handler->display->display_options['header']['view']['label'] = 'Next Show';
+  $handler->display->display_options['header']['view']['empty'] = FALSE;
+  $handler->display->display_options['header']['view']['view_to_insert'] = 'shows:block_1';
+  $handler->display->display_options['header']['view']['inherit_arguments'] = 0;
   $handler->display->display_options['path'] = 'news';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'News';
@@ -100,6 +104,7 @@ function tomes_blog_views_default_views() {
     t('- All -'),
     t('Offset'),
     t('Page'),
+    t('Next Show'),
     t('Block'),
   );
   $export['news'] = $view;

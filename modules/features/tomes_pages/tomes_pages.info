@@ -1,7 +1,7 @@
 name = "Tomes Pages"
 description = "Pages"
 core = "7.x"
-package = "Features"
+package = "Tomes"
 version = "7.x-1.0"
 project = "tomes_pages"
 dependencies[] = "contact"

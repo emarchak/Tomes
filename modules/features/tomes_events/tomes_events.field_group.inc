@@ -21,16 +21,15 @@ function tomes_events_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Event Details',
-    'weight' => '4',
+    'weight' => '5',
     'children' => array(
       0 => 'field_location',
       1 => 'field_date',
-      2 => 'field_fbevent',
-      3 => 'field_tickets',
+      2 => 'field_tickets',
     ),
-    'format_type' => 'tab',
+    'format_type' => 'fieldset',
     'format_settings' => array(
-      'formatter' => 'closed',
+      'formatter' => 'collapsible',
       'instance_settings' => array(
         'description' => '',
         'classes' => '',

@@ -106,7 +106,7 @@ function tomes_blog_field_default_fields() {
       'module' => 'image',
       'settings' => array(
         'default_image' => 0,
-        'uri_scheme' => 'public',
+        'uri_scheme' => 'flickr',
       ),
       'translatable' => '0',
       'type' => 'image',
@@ -153,12 +153,19 @@ function tomes_blog_field_default_fields() {
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'image',
+        'module' => 'media',
         'settings' => array(
+          'allowed_schemes' => array(
+            0 => 'public',
+            1 => 'private',
+          ),
+          'allowed_types' => array(
+            0 => 'image',
+          ),
           'preview_image_style' => 'thumbnail',
           'progress_indicator' => 'throbber',
         ),
-        'type' => 'image_image',
+        'type' => 'media_generic',
         'weight' => '1',
       ),
     ),

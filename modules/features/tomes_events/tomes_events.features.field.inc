@@ -49,7 +49,7 @@ function tomes_events_field_default_fields() {
           'module' => 'text',
           'settings' => array(),
           'type' => 'text_default',
-          'weight' => '3',
+          'weight' => '2',
         ),
         'teaser' => array(
           'label' => 'hidden',
@@ -115,7 +115,7 @@ function tomes_events_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'date',
           'settings' => array(
             'format_type' => 'long',
@@ -126,7 +126,7 @@ function tomes_events_field_default_fields() {
             'show_repeat_rule' => 'show',
           ),
           'type' => 'date_default',
-          'weight' => '2',
+          'weight' => '1',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -208,7 +208,7 @@ function tomes_events_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'module' => 'link',
           'settings' => array(),
           'type' => 'link_default',
@@ -249,7 +249,7 @@ function tomes_events_field_default_fields() {
         'module' => 'link',
         'settings' => array(),
         'type' => 'link_field',
-        'weight' => '5',
+        'weight' => '4',
       ),
     ),
   );
@@ -278,7 +278,7 @@ function tomes_events_field_default_fields() {
       'module' => 'image',
       'settings' => array(
         'default_image' => 0,
-        'uri_scheme' => 'public',
+        'uri_scheme' => 'flickr',
       ),
       'translatable' => '0',
       'type' => 'image',
@@ -289,7 +289,7 @@ function tomes_events_field_default_fields() {
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'hidden',
           'module' => 'image',
           'settings' => array(
             'image_link' => '',
@@ -321,12 +321,21 @@ function tomes_events_field_default_fields() {
       ),
       'widget' => array(
         'active' => 1,
-        'module' => 'image',
+        'module' => 'media',
         'settings' => array(
-          'preview_image_style' => 'thumbnail',
+          'allowed_schemes' => array(
+            'flickr' => 'flickr',
+            'public' => 0,
+          ),
+          'allowed_types' => array(
+            'audio' => 0,
+            'default' => 0,
+            'image' => 'image',
+            'video' => 0,
+          ),
           'progress_indicator' => 'throbber',
         ),
-        'type' => 'image_image',
+        'type' => 'media_generic',
         'weight' => '2',
       ),
     ),
@@ -352,19 +361,20 @@ function tomes_events_field_default_fields() {
       'default_value' => array(
         0 => array(
           'element_key' => 'node|event|field_location|und|0',
-          'thoroughfare' => '',
+          'thoroughfare' => '945 Bloor Street W',
           'premise' => '',
-          'locality' => '',
-          'administrative_area' => '',
-          'postal_code' => '',
+          'locality' => 'Toronto',
+          'administrative_area' => 'ON',
+          'postal_code' => 'M6H 1L4',
           'country' => 'CA',
+          'name_line' => 'Comedy Bar',
         ),
       ),
       'deleted' => '0',
       'description' => '',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'addressfield',
           'settings' => array(
             'format_handlers' => array(
@@ -373,7 +383,7 @@ function tomes_events_field_default_fields() {
             'use_widget_handlers' => 1,
           ),
           'type' => 'addressfield_default',
-          'weight' => '1',
+          'weight' => '3',
         ),
         'teaser' => array(
           'label' => 'above',
@@ -399,8 +409,8 @@ function tomes_events_field_default_fields() {
           'format_handlers' => array(
             'address' => 'address',
             'name-full' => 0,
-            'name-oneline' => 0,
-            'organisation' => 'organisation',
+            'name-oneline' => 'name-oneline',
+            'organisation' => 0,
           ),
         ),
         'type' => 'addressfield_standard',
@@ -445,7 +455,7 @@ function tomes_events_field_default_fields() {
       'description' => 'URL to online ticket seller',
       'display' => array(
         'default' => array(
-          'label' => 'above',
+          'label' => 'inline',
           'module' => 'link',
           'settings' => array(),
           'type' => 'link_default',

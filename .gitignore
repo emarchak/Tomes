@@ -4,3 +4,5 @@ private
 settings.php
 cache/
 files/
+dbconfig.php
+

@@ -90,7 +90,8 @@ function tomes_pages_update_10002(&$sandbox) {
   variable_set('social_media_twitter','http://twitter.com/tomesimprov');
   variable_set('social_media_mail', '/contact');
   variable_set('pathauto_node_pattern', '[node:title]');
-  
+  variable_set('site_frontpage', 'shows');
+
   return t('Success! Set social media link and pathauto pattern');
 }
 

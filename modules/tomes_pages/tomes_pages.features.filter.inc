@@ -10,7 +10,7 @@
 function tomes_pages_filter_default_formats() {
   $formats = array();
 
-  // Exported format: Plain text
+  // Exported format: Plain text.
   $formats['plain_text'] = array(
     'format' => 'plain_text',
     'name' => 'Plain text',

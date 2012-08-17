@@ -1,0 +1,32 @@
+<?php 
+
+/**
+ * @file
+ * Install, update and uninstall functions for the the tomes_users.
+ */
+
+/**
+ * Implements hook_install()
+ */
+function tomes_users_install() {
+  // Execute all module updates
+  $sandbox = array();
+  for ($i = 10000; $i < 10099; $i++){
+    $func = 'tomes_users_update_'.$i; // rename savvis to your module name
+    if (function_exists($func)){
+      $func($sandbox);
+    }
+  }
+}
+
+
+/**
+ * Implements hook_update_N().
+ *   Enable user pictures
+ */
+function tomes_users_update_10001(&$sandbox) {
+
+  variable_set('user_pictures', 1);
+  variable_set('user_picture_dimensions', '500x500');
+  return t('Success! Enabled user pictures.');
+}

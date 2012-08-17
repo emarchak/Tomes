@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Tomes Events feature.
- */
-
-include_once('tomes_events.features.inc');

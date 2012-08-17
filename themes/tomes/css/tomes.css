@@ -1,5 +1,5 @@
 /**
- * Footheme footheme.css
+ * Tomes tomes.css
  *
  * Use this file to add your custom styles.
  *
@@ -8,88 +8,207 @@
  * as well.
  */
 
-/**
- * @fontface settings
- */
-.tomes #page-title,
-.tomes #site-name a {
-  font-family: 'DeutschGothicNormal';
-  letter-spacing: .05em
+body {
+  background-color: #fff;
+  font-family: "Helvetica Neue", sans-serif;
+  line-height: 1.8;
+  margin: 0;
+  padding: 0 !important;
 }
-.tomes #page-title {
-  font-size: 3em;
-  text-align: center;
-}
-
-* {
-  color: #5e412f;
+.container {width:auto;}
+#header {
+  background: #f5f5f5 url('img/bg_header.png') repeat-x 0 100%;
+  position:relative;
 }
 
-* a:link,
-* a:visited {
-  color: #528c76;
+#header * {
+  color: #666;
 }
 
-* a:hover,
-* a:active {
-  color: #5e412f;
+#logo {
+  background: transparent url('img/bg_logo.png') no-repeat 50% 100%;
+  padding: 15px 0 55px 0;
+  width: 149px;
+  text-align:center;
+  position: relative;
+  z-index: 1;
+}
+#logo a {
+  display:block;
+  margin-left: -5px;
+}
+
+#menu-bar .menu-wrapper .menu li a {
+  font-weight: 300;
+  font-family: 'museo-sans', sans-serif;
+}
+
+#main-content > header {
+  margin: 0 0;
+}
+
+.region-tertiary-content {
+  text-align:center;
+}
+
+/* typography */
+h1 {
+  font-weight: 300;
+  font-family: 'museo-sans', sans-serif;
+}
+
+body,
+#site-name a,
+#menu-bar li.active a,
+.region-header .block-content > ul > li > a,
+h1.page-title,
+.article h2.article-title,
+.article h1.article-title a,
+.article h2.article-title a,
+.comment h3.comment-title a,
+.tabs ul.tabs li a,
+pre,
+code,
+samp,
+var,
+table.update tr,
+table.system-status-report tr {
+  color: #2e2e2e;
+}
+
+/* Links */
+a,
+a.active,
+li a.active,
+a:hover,
+a:focus,
+a.active:hover,
+a.active:focus,
+li a.active:hover,
+li a.active:focus {
+  color: #2e2e2e;
+}
+legend {
+  background-color: transparent;
+  color: #fff;
+}
+.node-readmore a,
+.article a:link,
+.article a:visited {
+  color: #2e2e2e;
+  padding: .1em .25em;
+  margin: 0 -.25em;
+}
+.article-content a:link,
+.article-content a:visited {
   text-decoration: underline;
 }
 
-
-/**
- * Header
- */
- 
- 
-.tomes #site-name a {
-  color: #fefce4;
-  text-align: center;
-  font-size: 2em;
+/* Link hovered */
+.node-readmore a,
+.article h1.article-title a,
+.article h2.article-title a {
+  text-decoration:none;
+}
+.node-readmore a,
+.article a:hover,
+.article a:active {
+  background-color: #f5f5f5;
+  text-decoration:none;
+    -moz-box-shadow: 1px 1px 3px #d3d3d3;
+    -webkit-box-shadow: 1px 1px 3px #d3d3d3;
+  box-shadow: 1px 1px 3px #d3d3d3;
 }
 
- 
-/**
- * Dropshadows
- */
- 
-.tomes #site-name a {
-    -webkit-text-shadow: 1px 1px 5px #333;
-    -moz-text-shadow: 1px 1px 5px #333;
-  text-shadow: 1px 1px 5px #333;
-} 
-
-
-#columns {
-  background: transparent url(../dropbg.png) no-repeat bottom center;
-  padding-bottom: 0.5em;
+.node-readmore {
+  float:right;
+  font-size: 1.1em;
 }
 
-#columns .columns-inner{
-  border:1px solid #fefce4;
-  background-color:#fefce4;
+
+.node-readmore a:after {
+  content: ' >>';
+}
+/* articles */
+article > header {
+  border-bottom-width:0;
 }
 
-/**
- * Navigation
- */
- 
-#menu-bar .menu-wrapper li a.active,
-#menu-bar .menu-wrapper li a.active:hover,
-#menu-bar .menu-wrapper li a:hover {
-  background-color: #fefce4;
-  text-decoration: none;
-  color: #000;
+.article img {
+  width:97%;
+  position:relative;
+  background-color: #ddd;
+  border-width: 0;
+    -moz-box-shadow: 1px 1px 3px #d3d3d3;
+    -webkit-box-shadow: 1px 1px 3px lightGrey;
+  box-shadow: 1px 1px 3px lightGrey;
+  padding: 1.5%;
+}
+
+.article .field-name-field-fbevent  a {
+ display:inline-block;
+ text-decoration:none;  
+}
+
+.article img.facebook {
+  width: auto !important;
+  padding: 0;
+    -moz-box-shadow: 0 0 0 transparent;
+    -webkit-box-shadow: 0 0 0 transparent;
   box-shadow: 0 0 0 transparent;
+  top: 0.2em;
+}
+/* views */
+
+.view {
+  position: relative;
+  z-index: 1; /* prevent shadows falling behind containers with backgrounds */
 }
 
-#menu-bar .menu-wrapper li a {
-  box-shadow: 0 -1px 2px #bbb inset;
-  background-color: #fcf2d1;
-  color: #666;
-  border-top:1px solid #eee;
+
+.view .attachment {
+  position: relative;
+  border: 1px solid #efefef;
+  margin-bottom: 4em;
+  background: #fff;
+    -webkit-box-shadow: 0 1px -4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.03) inset;
+    -moz-box-shadow: 0 1px -4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.03) inset; 
+  box-shadow: 0 1px -4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.03) inset; 
+}
+.view .attachment .clickable {
+  padding: 2em 3em;
+}
+.clickable:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
 }
 
-#menu-bar, #menu-bar .menu-wrapper {
-
+.view .attachment:before,
+.view .attachment:after {
+  content: '';
+  z-index: -1;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  width: 70%;
+  max-width: 300px; /* avoid rotation causing ugly appearance at large container widths */
+  max-height: 100px;
+  height: 55%;
+    -webkit-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    -webkit-transform: skew(-15deg) rotate(-6deg);
+    -moz-transform: skew(-15deg) rotate(-6deg);
+    -ms-transform: skew(-15deg) rotate(-6deg);
+    -o-transform: skew(-15deg) rotate(-6deg);
+  transform: skew(-15deg) rotate(-6deg); 
+}
+.view .attachment:after {
+  left: auto;
+  right: 20px;
+    -webkit-transform: skew(15deg) rotate(6deg);
+    -moz-transform: skew(15deg) rotate(6deg);
+    -ms-transform: skew(15deg) rotate(6deg);
+    -o-transform: skew(15deg) rotate(6deg);
+  transform: skew(15deg) rotate(6deg); 
 }

@@ -23,14 +23,24 @@ function tomes_preprocess_html(&$vars) {
   );
   load_subtheme_media_queries($media_queries_css, 'tomes');
  
-  drupal_add_js(path_to_theme().'/js/jquery.backstretch.min.js', 'file');
-  drupal_add_js('(function ($) {
-  $(document).ready(function() {
-    $.backstretch("/'.path_to_theme().'/background.jpg");
-  });
-  })(jQuery);',
-     array('type' => 'inline')
-  );
+  //load typekit fonts
+  drupal_add_js('//use.typekit.net/gqy7acr.js', array(
+      'type' => 'external',
+      'scope' => 'footer',
+      'preprocess' => FALSE,
+    ));
+  drupal_add_js('try{Typekit.load();}catch(e){}', array(
+      'type' => 'inline',
+      'scope' => 'footer'
+    ));
+  
+  //kill the image classes
+  $image_key = array_search('ia-r', $vars['classes_array']);
+  if ($image_key) {
+    unset($vars['classes_array'][$image_key]);
+  }
+  
+  $vars['classes'] = trim(implode(' ', $vars['classes_array']));
 
  /**
   * Load IE specific stylesheets
@@ -53,3 +63,12 @@ function tomes_preprocess_html(&$vars) {
   // */
 
 }
+
+
+/** 
+ * Override or inser variables into node templates.
+ */
+   /* -- 
+function tomes_preprocess_node(&$vars) {
+} 
+//*/

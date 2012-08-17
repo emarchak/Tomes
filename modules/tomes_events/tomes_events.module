@@ -1,0 +1,80 @@
+<?php
+/**
+ * @file
+ * Code for the Tomes Events feature.
+ */
+
+include_once('tomes_events.features.inc');
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function tomes_events_field_formatter_info() {
+  return array(
+    'tomes_events_formatter' => array( //Machine name of the formatter
+      'label' => t('Facebook Link'),
+      'field types' => array('link_field'),
+      'settings'  => array( //Array of the settings we'll create
+        'tooltip' => 'Output link as facebook styled icon', //ditto
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function tomes_events_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  //This gets the view_mode where our settings are stored
+  $display = $instance['display'][$view_mode];
+  //This gets the actual settings
+  $settings = $display['settings'];
+  //Initialize the element variable
+  $element = array();
+  //Add your select box
+  $element['tooltip'] = array(
+    '#type'           => 'textfield',                        // Use a textbox
+    '#title'          => t('Tool Tip'),                      // Widget label
+    '#description'    => t('This text will appear when a user mouses over.'),  // helper text
+    '#default_value'  => $settings['tooltip'],               // Get the value if it's already been set
+  );
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary().
+ */
+function tomes_events_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = t('Use a Facebook button with the tooltip of "@tooltip"', array(
+    '@tooltip'  => $settings['tooltip'],
+  )); // we use t() for translation and placeholders to guard against attacks
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function tomes_events_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array(); // Initialize the var
+  $settings = $display['settings']; // get the settings
+  $tooltip = $settings['tooltip']; // The tool tip assigned in settings
+  // Create the image - Note that I'm storing the images in our module but they could be anywhere
+  $image = '<img src="/' . drupal_get_path('module', 'tomes_events') . '/fb-logo.png" class="facebook">';
+
+  foreach ($items as $delta => $item) {
+    $fb = $item['url']; // Getting the actual value
+  }
+  $options = array(
+    'html'        => TRUE, // This tells Drupal that we're sending HTML, not plain text, otherwise it would encode it
+    'attributes'  => array(
+      'title' => $tooltip, // This sets our tooltip
+      ),
+    );
+  if(isset($fb)) {
+    $link = l($image . ' ' . $tooltip, $fb, $options); // Create the Link
+    $element[0]['#markup'] = $link; // Assign it to the #markup of the element
+  }
+  return $element;
+}

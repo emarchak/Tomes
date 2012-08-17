@@ -1,0 +1,177 @@
+<?php
+/**
+ * @file
+ * Code for the Tomes Pages feature.
+ */
+
+include_once('tomes_pages.features.inc');
+
+/**
+ * Implements hook_block_info().
+ *
+ * This hook declares what blocks are provided by the module.
+ */
+function tomes_pages_block_info() {
+
+  $blocks['social_media'] = array(
+    'info' => t('Social Media Blocks'),
+    'enabled' => TRUE,
+    'region' => 'tertiary_content',
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ *
+ * This hook declares configuration options for blocks provided by this module.
+ */
+function tomes_pages_block_configure($delta = '') {
+  // The $delta parameter tells us which block is being configured.
+  // In this example, we'll allow the administrator to customize
+  // the text of the 'configurable text string' block defined in this module.
+
+  $form = array();
+  if ($delta == 'social_media') {
+    $form['social_media_facebook'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Facebook Link'),
+      '#size' => 60,
+      '#description' => t('This text will be presented as the facebook account.'),
+      '#default_value' => variable_get('social_media_facebook',  'http://facebook.com'),
+    );
+    $form['social_media_twitter'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Twitter Link'),
+      '#size' => 60,
+      '#description' => t('This text will be presented as the twitter account.'),
+      '#default_value' => variable_get('social_media_twitter',  'http://twitter.com'),
+    );
+    $form['social_media_mail'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Contact Link'),
+      '#size' => 60,
+      '#description' => t('This text will be presented as the contact information.'),
+      '#default_value' => variable_get('social_media_twitter',  'mailto:email@email.com'),
+    );
+    $form['social_media_rss'] = array(
+      '#type' => 'textfield',
+      '#title' => t('rss Link'),
+      '#size' => 60,
+      '#description' => t('This text will be presented as the rss feed.'),
+      '#default_value' => variable_get('social_media_rss',  'rss.xml'),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ *
+ * This hook declares how the configured options for a block
+ * provided by this module are saved.
+ */
+function tomes_pages_block_save($delta = '', $edit = array()) {
+  // We need to save settings from the configuration form.
+  // We need to check $delta to make sure we are saving the right block.
+  if ($delta == 'social_media') {
+    variable_set('social_media_facebook', $edit['social_media_facebook']);
+    variable_set('social_media_twitter', $edit['social_media_twitter']);
+    variable_set('social_media_mail', $edit['social_media_mail']);
+    variable_set('social_media_rss', $edit['social_media_rss']);
+  }
+  return;
+}
+
+
+/**
+ * Implements hook_block_view().
+ *
+ * This hook generates the contents of the blocks themselves.
+ */
+function tomes_pages_block_view($delta = '') {
+  $block = array();
+  //The $delta parameter tells us which block is being requested.
+  switch ($delta) {
+    case 'social_media':
+      $block['subject'] = '<none>';
+      $block['content'] = tomes_pages_social_media_contents();
+      break;   
+  }
+  return $block;
+}
+
+
+
+/**
+ * A module-defined block content function.
+ */
+function tomes_pages_social_media_contents() {
+
+  $facebook = variable_get('social_media_facebook',  'http://facebook.com');
+  $twitter  = variable_get('social_media_twitter',  'http://twitter.com');
+  $mail     = variable_get('social_media_twitter',  'mailto:email@email.com');
+  $rss      = variable_get('social_media_rss',  'rss.xml');
+  $img      = drupal_get_path('module', 'tomes_pages') . '/inc/';
+
+
+  $markup = l(
+    theme('image', array(
+      'path' => $img . 'facebook.png', 
+      'alt' => 'facebook'
+    )), 
+    $facebook, 
+    array( 
+      'attributes' => array(
+        'class' => array(
+          'facebook', 
+          'social-media')),
+      'html' => TRUE,
+  ));
+
+  $markup .= l(
+    theme('image', array(
+      'path' => $img . 'twitter.png', 
+      'alt' => 'twitter'
+    )), 
+    $twitter, 
+    array( 
+      'attributes' => array(
+        'class' => array(
+          'twitter', 
+          'social-media')),
+      'html' => TRUE,
+  ));
+  $markup .= l(
+    theme('image', array(
+      'path' => $img . 'rss.png', 
+      'alt' => 'rss'
+    )), 
+    $rss, 
+    array( 
+      'attributes' => array(
+        'class' => array(
+          'rss', 
+          'social-media')),
+      'html' => TRUE,
+  ));
+  $markup .= l(
+    theme('image', array(
+      'path' => $img . 'email.png', 
+      'alt' => 'mail'
+    )), 
+    $mail, 
+    array( 
+      'attributes' => array(
+        'class' => array(
+          'mail', 
+          'social-media')),
+      'html' => TRUE,
+  ));
+     
+  return array('#markup' => $markup);
+
+}
+
+

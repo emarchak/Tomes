@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Tomes Pages feature.
- */
-
-include_once('tomes_pages.features.inc');

@@ -4,6 +4,10 @@
  */
 
 FB_JS = function(){};
+FB_JS.fbu = null; // Detect session changes
+FB_JS.ignoreEvents = false; // Hack makes login status test possible
+FB_JS.reloadParams = {}; // Pass data to drupal when reloading
+
 FB_JS.fbu = null;
 
 /**
@@ -19,8 +23,6 @@ FB_JS.fbu = null;
 })(jQuery);
 
 /**
- * Drupal behaviors hook.
- *
  * Called when page is loaded, or content added via javascript.
  */
 FB_JS.drupalBehaviors = function(context) {
@@ -29,8 +31,8 @@ FB_JS.drupalBehaviors = function(context) {
   if (!events || !events.fb_session_change) {
     jQuery(document).bind('fb_session_change', FB_JS.sessionChangeHandler);
   }
-  
-  // Once upon a time, we initialized facebook's JS SDK here, but now that is done in fb_footer().
+
+  // Facebook's JS SDK should be initialized in fb_footer().
   if (typeof(FB) != 'undefined') {
     // Render any XFBML markup that may have been added by AJAX.
     jQuery(context).each(function() {
@@ -44,6 +46,11 @@ FB_JS.drupalBehaviors = function(context) {
   // Markup with class .fb_show should be visible if javascript is enabled.  .fb_hide should be hidden.
   jQuery('.fb_hide', context).hide();
   jQuery('.fb_show', context).show();
+
+  if (Drupal.settings.fb.fb_reloading) {
+    // The reloading flag helps us avoid infinite loops.  But will accidentally prevent a reload in some cases. We really want to prevent a reload for a few seconds.
+    setTimeout(function() {Drupal.settings.fb.fb_reloading = false;}, 5000);
+  }
 };
 
 if (typeof(window.fbAsyncInit) != 'undefined') {
@@ -51,85 +58,77 @@ if (typeof(window.fbAsyncInit) != 'undefined') {
   debugger;
 };
 
-/**
- * This function called by facebook's javascript when it is loaded.
- * http://developers.facebook.com/docs/reference/javascript/
- *
- * This function has grown complex trying to handle various
- * permutations of facebook's APIs.  The FB functions that take a
- * callback (i.e. FB.getLoginStatus and FB.api) are often never called
- * back.  So, to work around that, there may be some redundant calls.
- */
 window.fbAsyncInit = function() {
 
   if (Drupal.settings.fb) {
     FB.init(Drupal.settings.fb.fb_init_settings);
   }
 
-  // Facebook recommends calling getLoginStatus after FB.init (http://developers.facebook.com/docs/reference/javascript/FB.getLoginStatus/)
-  // However, it's got lots of bugs reported against it (https://developers.facebook.com/bugs/240058389381072, http://developers.facebook.com/bugs/173032012783482?browse=search_4ecd4a1aa27a81146273027)
-  // So we make it optional whether we call it or not.
-  if (Drupal.settings.fb.get_login_status) {
-    FB.getLoginStatus(function(response) {
-      FB_JS.initFinal(response);
-      FB_JS.authResponseChange(response);
-    });
-  }
-  else if (Drupal.settings.fb.fb_init_settings.authResponse) {
-    // Our authResponse sent to us from fb.module.
-    FB_JS.initFinal({'authResponse' : Drupal.settings.fb.fb_init_settings.authResponse});
+  if (Drupal.settings.fb.fb_init_settings.authResponse) {
+    // Trust login status passed into us.  No getLoginStatus
+    FB_JS.fbAsyncInitFinal();
+
   }
   else {
-    // No application.  Not safe to call FB.getLoginStatus().
-    // Or, we are configured to not call getLoginStatus().
-    // We still want to initialize XFBML, third-party modules, etc.
-    FB_JS.initFinal({'authResponse' : null});
-  }
-
-  if (!Drupal.settings.fb.get_login_status && Drupal.settings.fb.test_login_status && FB.getUserID()) {
-    // This is an alternative to calling getLoginStatus().  Adds some overhead to the client side by calling FB.api on every page.  But, will detect if user has logged out of facebook.
-    FB.api('/me', function(response) {
-      // Calling FB.api is unfortunate overhead, but no other way to detect if user has logged out of facebook.
-      if (typeof(response.error) != 'undefined') {
-        // Fake an auth response change so Drupal knows user is logged out.
-        FB_JS.authResponseChange({'authResponse' : null});
+    FB_JS.getLoginStatus(function(response) {
+      if (Drupal.settings.fb.fbu && !response.authResponse) {
+        if (Drupal.settings.fb.page_type) {
+          // On canvas and tabs(?), this probably means third-party cookies not accepted.
+          debugger;
+          FB_JS.reloadParams.fb_login_status = false;
+        }
       }
-      else if (response.id != Drupal.settings.fb.fbu) {
-        // Fake an auth response change so Drupal knows user has changed.
-        FB_JS.authResponseChange({'authResponse' : {'userID' : response.id}});
-      }
+      FB_JS.fbAsyncInitFinal(response);
     });
   }
-};
+}
 
-FB_JS._calledInitFinal = false; // workaround broken FB.getLoginStatus.
-/**
- * Finish initializing, whether there is an application or not.
- */
-FB_JS.initFinal = function(response) {
-  // This semaphore prevents this function from being called more than once.
-  if (FB_JS._calledInitFinal && response.session == null) {
-    return;
+FB_JS._fbAsyncInitFinalComplete = false; // semaphore
+FB_JS.fbAsyncInitFinal = function(response) {
+
+  if (FB_JS._fbAsyncInitFinalComplete && !response) {
+    return; // execute this function only once.
   }
-  FB_JS._calledInitFinal = true;
+  FB_JS._fbAsyncInitFinalComplete = true;
 
-  var status = {
-    'status': response.status, // not using oauth
-    'auth': response.authResponse, // using oauth
-    'response': response
-  };
+  if (!response) {
+    response = FB.getAuthResponse();
+  }
 
-  jQuery.event.trigger('fb_init', status);  // Trigger event for third-party modules.
+  jQuery.event.trigger('fb_init');  // Trigger event for third-party modules.
 
   FB_JS.authResponseChange(response); // This will act only if fbu changed.
 
-  FB_JS.eventSubscribe();
-  FB_JS.showConnectedMarkup(); // Make sure this called even when FB callbacks are not called.
+  FB_JS.eventSubscribe();  // Get notified when session changes
+
+  FB_JS.showConnectedMarkup(FB.getUserID()); // Show/hide markup based on connect status
 
   if (typeof(FB.XFBML) != 'undefined') {
-    FB.XFBML.parse(); // soon to be deprecated!
+    FB.XFBML.parse(); // soon to be deprecated?
   }
-}
+
+};
+
+/**
+ * Wrapper for FB.getLoginStatus().
+ * Unlike the FB version, this function always calls its callback.
+ */
+FB_JS.getLoginStatus = function(callback, force) {
+  var semaphore; // Avoid multiple calls to callback.
+  semaphore = false;
+
+  FB.getLoginStatus(function(response) {
+    semaphore = true;
+    callback(response);
+  }, force);
+
+  // Fallback for when getLoginStatus never calls us back.
+  setTimeout(function() {
+    if (!semaphore) {
+      callback({'authResponse' : null});
+    }
+  }, 3000); // 3000 = 3 seconds
+};
 
 /**
  * Tell facebook to notify us of events we may need to act on.
@@ -140,7 +139,6 @@ FB_JS.eventSubscribe = function() {
 
   // Q: what the heck is "edge.create"? A: the like button was clicked.
   FB.Event.subscribe('edge.create', FB_JS.edgeCreate);
-
 }
 
 /**
@@ -164,37 +162,13 @@ FB_JS.getUrlVars = function(href) {
 /**
  * Reload the current page, whether on canvas page or facebook connect.
  *
- * append fbsig, a hash of the session data, to avoid infinite reloads
- * in some cases.
  */
 FB_JS.reload = function(destination) {
 
-  if (Drupal.settings.fb.reload_url_append_hash) {
-    var fbhash;
-
-    // Determine url hash.
-    if (typeof(FB.getAuthResponse) != 'undefined') {
-      var auth = FB.getAuthResponse();
-
-      if (auth != null)
-        fbhash = auth.signedRequest; // Use sig rather than compute a new hash.
-      else
-        fbhash = 0;
-    }
-    else {
-      var session = FB.getSession();
-      if (session != null)
-        fbhash = session.sig;
-      else
-        fbhash = 0;
-    }
-  }
-
-  // Avoid infinite reloads.  Still needed? It would be nice to do away with this code if not needed.
-  ///@TODO - does not work on iframe because facebook does not pass url args to canvas frame when cookies not accepted.  http://forum.developers.facebook.net/viewtopic.php?id=77236
-  var vars = FB_JS.getUrlVars(window.location.href);
-  if (typeof(fbhash) != 'undefined' && vars.fbhash == fbhash) {
-    return; // Do not reload (again)
+  // Avoid infinite reloads.  Esp on canvas pages when third-party cookies disabled.
+  if (Drupal.settings.fb.fb_reloading) {
+    debugger; // JS and PHP SDKs are not in sync.
+    return;
   }
 
   // Determine where to send user.
@@ -219,12 +193,21 @@ FB_JS.reload = function(destination) {
     path = destination.substr(0, destination.indexOf('?'));
   }
 
+  // Passing this helps us avoid infinite loop.
+  FB_JS.reloadParams.fb_reload = true;
+
+  // Canvas pages will not get POST vars, so include them in the URL.
+  if (Drupal.settings.fb.page_type == 'canvas') {
+    for (var key in FB_JS.reloadParams) {
+      vars.push(key + '=' + FB_JS.reloadParams[key]);
+    }
+  }
+
   // Add fbhash to params before reload.
   if (Drupal.settings.fb.reload_url_append_hash) {
     vars.push('fbhash=' + fbhash);
   }
 
-  // Use window.top for iframe canvas pages.
   destination = vars.length ? (path + '?' + vars.join('&')) : path;
 
   if (Drupal.settings.fb.reload_url_fragment) {
@@ -243,61 +226,86 @@ FB_JS.reload = function(destination) {
     jQuery('body').prepend('<div id="fb_js_pb" class="progress"><div class="bar"><div class="filled"></div></div></div>');
   }
 
-  window.top.location = destination;
-  //alert(destination); // debugging.
+  // Use POST to get past any caching on the server.
+  // reloadParams includes signed_request.
+  if (Drupal.settings.fb.fbu && Drupal.settings.fb.test_login_status) {
+    // The login status test might break all future calls to FB.  So we do it only immediately before reload.
+    FB_JS.testGetLoginStatus(function() {
+      FB_JS.postToURL(destination, FB_JS.reloadParams);
+    });
+  }
+  else if (!FB_JS.isEmpty(FB_JS.reloadParams)) {
+    FB_JS.postToURL(destination, FB_JS.reloadParams);
+  }
+  else {
+    window.top.location = destination; // Uses GET, returns cached pages.
+  }
+
 };
 
+/**
+ * Send the browser to a URL.
+ * Similar to setting window.top.location, but via POST instead of GET.
+ * POST will get through Drupal cache or external cache (i.e. Varnish)
+ */
+FB_JS.postToURL = function(path, params, method) {
+  method = method || "post"; // Set method to post by default, if not specified.
+
+  // The rest of this code assumes you are not using a library.
+  // It can be made less wordy if you use one.
+  var form = document.createElement("form");
+  form.setAttribute("method", method);
+  form.setAttribute("action", path);
+  form.setAttribute("target", '_top'); // important for canvas pages
+
+  for(var key in params) {
+    if(params.hasOwnProperty(key)) {
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", key);
+      hiddenField.setAttribute("value", params[key]);
+
+      form.appendChild(hiddenField);
+    }
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
 
 
 // Facebook pseudo-event handlers.
 FB_JS.authResponseChange = function(response) {
+  if (FB_JS.ignoreEvents) {
+    return;
+  }
 
-  //debugger;
-  if (response.status == 'unknown') {
-    // @TODO can we test if third-party cookies are disabled?
+  if (response.authResponse && response.authResponse.signedRequest) {
+    // If we end up reloading page, pass signed request.
+    FB_JS.reloadParams.signed_request = response.authResponse.signedRequest;
+  }
+  else {
+    delete FB_JS.reloadParams.signed_request;
   }
 
   var status = {
     'changed': false,
     'fbu': FB.getUserID(),
-    'session': response.authResponse, // deprecated,  still needed???
-    'auth': response.authResponse, // still needed???
     'response' : response
   };
 
   if ((Drupal.settings.fb.fbu || status.fbu) &&
       Drupal.settings.fb.fbu != status.fbu) {
-    // A user has logged in.
+    // Drupal.settings.fb.fbu (from server) not the same as status.fbu (from javascript).
     status.changed = true;
   }
-
-  /*
-  if (response.authResponse) {
-    status.fbu = response.authResponse.userID;
-    if (Drupal.settings.fb.fbu != status.fbu) {
-      // A user has logged in.
-      status.changed = true;
-    }
-  }
-  else if (response.session) {
-    status.fbu = response.session.uid;
-    if (Drupal.settings.fb.fbu != status.fbu) {
-      // A user has logged in.
-      status.changed = true;
-    }
-  }
-  else if (Drupal.settings.fb && Drupal.settings.fb.fbu) {
-    // A user has logged out.
-    status.changed = true;
-  }
-*/
 
   if (status.changed) {
-    // fbu has changed since server built the page.
-    jQuery.event.trigger('fb_session_change', status);
-
     // Remember the fbu.
     Drupal.settings.fb.fbu = status.fbu;
+
+    // fbu has changed since server built the page.
+    jQuery.event.trigger('fb_session_change', status);
 
     FB_JS.showConnectedMarkup(status.fbu);
   }
@@ -305,8 +313,8 @@ FB_JS.authResponseChange = function(response) {
 
 // edgeCreate is handler for Like button.
 FB_JS.edgeCreate = function(href, widget) {
-  var status = {'href': href};
-  FB_JS.ajaxEvent('edge.create', status);
+  var data = {'href': href};
+  FB_JS.ajaxEvent('edge.create', data);
 };
 
 // JQuery pseudo-event handler.
@@ -317,10 +325,11 @@ FB_JS.sessionChangeHandler = function(context, status) {
     'is_anonymous': Drupal.settings.fb.is_anonymous
   };
 
-  data.fbu = FB.getUserID();
+  data.fbu = status.fbu;
 
   FB_JS.ajaxEvent(data.event_type, data);
-  // No need to call window.location.reload().  It will be called from ajaxEvent, if needed.
+
+  // Note that ajaxEvent might reload the page.
 };
 
 
@@ -329,8 +338,6 @@ FB_JS.sessionChangeHandler = function(context, status) {
 FB_JS.ajaxEvent = function(event_type, request_data) {
   if (Drupal.settings.fb.ajax_event_url) {
 
-    // Session data helpful in ajax callbacks.  See fb_settings.inc.
-    // request_data.fb_js_session = JSON.stringify(FB.getSession()); // FB.getSession() FAILS! REMOVE or REPLACE.
     if (typeof(Drupal.settings.fb_page_type) != 'undefined') {
       request_data.fb_js_page_type = Drupal.settings.fb_page_type;
     }
@@ -348,7 +355,7 @@ FB_JS.ajaxEvent = function(event_type, request_data) {
     // In case cookies are not accurate, always pass in signed request.
     if (typeof(FB.getAuthResponse) != 'undefined') {
       response = FB.getAuthResponse();
-      if (response) {
+      if (response && response.signedRequest) {
         request_data.signed_request = response.signedRequest;
       }
     }
@@ -369,6 +376,7 @@ FB_JS.ajaxEvent = function(event_type, request_data) {
       success: function(js_array, textStatus, XMLHttpRequest) {
         if (js_array.length > 0) {
           for (var i = 0; i < js_array.length; i++) {
+            // alert(js_array[i]);// debug
             eval(js_array[i]);
           }
         }
@@ -400,9 +408,6 @@ FB_JS.ajaxEvent = function(event_type, request_data) {
  * connect/disconnect.
  */
 FB_JS.showConnectedMarkup = function(fbu, context) {
-  if (!fbu && typeof(FB) != 'undefined')
-    fbu = FB.getUserID(); // More reliable than fbu passed in.
-
   if (context || fbu != FB_JS.fbu) {
     if (fbu) {
       FB_JS.fbu = fbu;
@@ -419,3 +424,29 @@ FB_JS.showConnectedMarkup = function(fbu, context) {
   }
 };
 
+/**
+ * Tests whether FB.getLoginStatus() will work.
+ * It tends to fail when user disables third-party cookies, and when apps are in sandbox mode, and probably more cases.
+ * The danger of running this test is that if it fails, future calls to FB will break, because FB will forget the current user's credentials.
+ */
+FB_JS.testGetLoginStatus = function(callback) {
+  // Attempt to learn whether third party cookies are enabled.
+  FB_JS.ignoreEvents = true; // disregard events triggered by getLoginStatus.
+  FB_JS.getLoginStatus(function(response) {
+    FB_JS.ignoreEvents = false; // we can pay attention again
+    if (!response.authResponse) {
+      // Let fb.module know that test failed.
+      FB_JS.reloadParams.fb_login_status = false;
+    }
+    callback(response.authResponse);
+  }, true);
+};
+
+
+// Quick test whether object contains anything.
+FB_JS.isEmpty = function(ob) {
+  for(var i in ob){
+    return false;
+  }
+  return true;
+}

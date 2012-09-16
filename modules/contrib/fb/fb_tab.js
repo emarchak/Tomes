@@ -31,6 +31,5 @@ FB_Tab = function(){};
  * Called after Facebook javascript has initialized.  Global FB will be set.
  */
 FB_Tab.setAutoResize = function() {
-  // Auto resize hopefully works same on tab iframes as it does on canvas pages.
-  FB.Canvas.setAutoResize(true, 100); // time in ms, default 100.
+  FB.Canvas.setAutoGrow();
 };

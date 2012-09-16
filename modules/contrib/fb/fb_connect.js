@@ -56,7 +56,7 @@ FB_Connect.logoutHandler = function(event) {
   // If we need to reload, go to front page.
   Drupal.settings.fb.reload_url = Drupal.settings.fb_connect.front_url;
 
-  if (typeof(FB) != 'undefined') {
+  if (typeof(FB) != 'undefined' && FB.getAuthResponse()) {
     try {
       FB.logout(function () {
         // Logged out of facebook.  Session change event will log us out of drupal and
@@ -76,7 +76,8 @@ FB_Connect.logoutHandler = function(event) {
     }
   }
   else {
-    return false;
+    debugger;
+    return true;
   }
 };
 

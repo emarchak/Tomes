@@ -228,6 +228,7 @@ function fb_user_fb($op, $data, &$return) {
       }
       else {
         $uid = 0;
+        _fb_logout();
       }
       if ($uid || $event_data['is_anonymous'] != 'true') {
         // The Drupal user has changed, we should reload after ajax returns to fb.js.
@@ -744,7 +745,7 @@ function fb_user_user_delete($account) {
  *
  * User has logged out.
  */
-function fb_user_user_logout($account) {
+function fb_user_user_logoutXXX($account) { // Disabled.  Still needed?  Seems to cause problems in some cases.
   global $user, $_fb_app;
 
   if (fb_facebook_user() &&

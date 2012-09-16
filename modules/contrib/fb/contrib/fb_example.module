@@ -227,20 +227,6 @@ function fb_example_fb($op, $data, &$return) {
   // Uncomment next line to figure out when this hook is called and what it is passed.
   //dpm(func_get_args(), "fb_example_fb($op) called"); // debug
 
-  if ($op == FB_OP_INITIALIZE) {
-    // This $op is invoked after fb.module initializes Facebook's PHP SDK.
-
-    // When third-party cookies are disabled on Firefox, Facebook's Javascript will not remember the user is connected.  We can work around this by storing credentials in our session and passing it javascript on every page.  It's sort of a hack, so let's do it only on Firefox browsers.
-    // See http://developers.facebook.com/bugs/173032012783482
-    if (arg(0) != 'admin') { // Don't muck vars on admin pages.
-      if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox') !== FALSE) {
-        $GLOBALS['conf'][FB_VAR_JS_USE_SESSION] = TRUE;
-        $GLOBALS['conf'][FB_VAR_JS_GET_LOGIN_STATUS] = FALSE;
-        $GLOBALS['conf'][FB_VAR_JS_TEST_LOGIN_STATUS] = TRUE;
-      }
-    }
-  }
-
   if ($op == FB_OP_AJAX_EVENT) {
     // We get FB_OP_AJAX_EVENT when fb.js calls us in reponse to a javascript event.
     if ($data['event_type'] == 'edge.create' && variable_get('fb_example_like_thanks', FALSE)) {

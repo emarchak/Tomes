@@ -34,15 +34,56 @@ function theme_fb_markup($params) {
   return $output;
 }
 
+/**
+ * Theme a Facebook Connect button.
+ *
+ * Uses a link with onclick="FB.login()", because this works much better
+ * than fb:login-button on Firefox when third-party cookies disabled.
+ *
+ */
 function theme_fb_login_button($params) {
   $text = isset($params['text']) ? $params['text'] : '';
   $options = isset($params['options']) ? $params['options'] : array();
 
-  // Facebook used to provide default text.  No longer, apparently.
-  if (!$text) {
+  // Merge in defaults
+  $options += array(
+    'attributes' => array(),
+    'connected_markup' => NULL,
+  );
+
+  $options['attributes'] += array(
+    'class' => 'fb_login_button_wrapper fb_button_style',
+  );
+
+  if ($text === NULL) {
     $text = t('Connect');
   }
 
+
+  // For compatibility, pass in scope as an attribute.
+  if (!isset($options['attributes']['scope'])) {
+    // Which permissions to prompt for?
+    $perms = array();
+    drupal_alter('fb_required_perms', $perms);
+    if (count($perms)) {
+      $options['attributes']['scope'] = implode(',', $perms);
+    }
+  }
+  $scope = $options['attributes']['scope'];
+  unset($options['attributes']['scope']); // New markup does not need this attr.
+
+  $markup = '<div ' . drupal_attributes($options['attributes']) . '><a href="#" onclick="FB.login(function(){}, {scope : \'' . $scope . '\'}); return false;"><div><span>' . $text . '</span></div></a></div>';
+
+  if ($options['connected_markup']) {
+    $markup = '<div class=fb_not_connected>' . $markup . '</div>' .
+      '<div class=fb_connected>' . $options['connected_markup'] . '</div>';
+  }
+  return $markup;
+}
+
+// This is the old way, using facebook social plugin markup
+// Replaced by theme_fb_login_button() above to better support Firefox with third-party cookies disabled.
+function theme_fb_login_buttonXXX($text = '', $options = array()) {
   // Merge in defaults
   $options += array(
     'attributes' => array(),

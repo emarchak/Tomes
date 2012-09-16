@@ -384,11 +384,12 @@ function fb_admin_settings() {
 
   $form['fb_admin_js'][FB_VAR_JS_OAUTH] = array(
     '#type' => 'checkbox',
-    '#title' => t('Use Oauth when initializing javascript.'),
+    '#title' => t('Use Oauth when initializing javascript.') . t(' - Deprecated'),
     '#default_value' => variable_get(FB_VAR_JS_OAUTH, TRUE),
     '#description' => t('Pass oauth TRUE to <a href=!url target=_blank>FB.init()</a>.  When checked, javascript SDK looks for new-style cookie named "fbsr_...".  When unchecked, looks for old-style cookie named "fbs_...".  When this and above options are unchecked, user will have to explicitly connect/disconnect from your site, logging in/out of facebook will not be automatically detected.', array(
                           '!url' => 'http://developers.facebook.com/docs/reference/javascript/FB.init/',
                         )),
+    '#disabled' => TRUE,
   );
 
   $form['fb_admin_js'][FB_VAR_JS_GET_LOGIN_STATUS] = array(
@@ -403,27 +404,29 @@ function fb_admin_settings() {
 
   $form['fb_admin_js'][FB_VAR_JS_TEST_LOGIN_STATUS] = array(
     '#type' => 'checkbox',
-    '#title' => t('Alternative verify login status when initializing javascript.'),
+    '#title' => t('Alternative verify login status when initializing javascript.') . t(' - Deprecated'),
     '#default_value' => variable_get(FB_VAR_JS_TEST_LOGIN_STATUS, FALSE),
     '#description' => t('When not using FB.getLoginStatus() (because it is <a href=!url target=_blank>buggy</a>) detect log out of facebook via a call to FB.api().  Does not detect a login (the user must explicitly click a connect button). This may add overhead on the client side to every page load.   This setting only takes effect when the setting above is unchecked.', array(
                           '!url' => 'http://developers.facebook.com/bugs/173032012783482',
                         )),
+    '#disabled' => TRUE, // @TODO remove entirely
   );
 
   $form['fb_admin_js'][FB_VAR_JS_USE_SESSION] = array(
     '#type' => 'checkbox',
     '#title' => t('Use tokens in session to initialize javascript'),
-    '#default_value' => variable_get(FB_VAR_JS_USE_SESSION, FALSE),
-    '#description' => t('Attempt to workaround <a href=!url target=_blank>a bug in facebook\'s javascript</a> by passing a signed request in the js settings.  Facebook\'s SDK should use that instead of a cookie. (Only works when storing tokens in session and using oauth.)', array(
+    '#default_value' => variable_get(FB_VAR_JS_USE_SESSION, TRUE),
+    '#description' => t('Pass access tokens in javascript settings.  This should help when browsers disable <a href=!url target=_blank>third-party cookies</a>.  However, it includes the access token in the page markup, where it could be intercepted if pages are not encrypted.', array(
                           '!url' => 'http://developers.facebook.com/bugs/173032012783482',
                         )),
   );
 
   $form['fb_admin_js'][FB_VAR_RELOAD_APPEND_HASH] = array(
     '#type' => 'checkbox',
-    '#title' => t('Append hash on javascript page reload'),
+    '#title' => t('Append hash on javascript page reload') . t(' - Deprecated'),
     '#default_value' => variable_get(FB_VAR_RELOAD_APPEND_HASH, FALSE),
     '#description' => t('When fb.js reloads (on session change), append a query parameter which serves two purposes.  First, it will break through a cache which may be desireable when facebook session changes.  Second, it prevents infinite reloads when third-party cookies are not enabled.  Enable this if you encounter either of those problems.'),
+    '#disabled' => TRUE, // deprecated and soon to be removed.
   );
 
   $form['fb_username_performance'] = array(

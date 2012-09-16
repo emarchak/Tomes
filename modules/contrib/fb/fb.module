@@ -30,7 +30,7 @@ define('FB_OP_CURRENT_APP', 'current_app'); // determine active app in canvas pa
 define('FB_OP_INITIALIZE', 'init'); //
 define('FB_OP_POST_INIT', 'post init'); //
 
-define('FB_OP_EXIT', 'exit'); // End an FB callback
+define('FB_OP_EXIT', 'exit'); // End an FB callback. DEPRECATED
 define('FB_OP_GET_FBU', 'get_fbu'); // Query the local user's FB account
 define('FB_OP_GET_UID', 'get_uid'); // Query the facebook user's local account
 define('FB_OP_GET_USER_SESSION', 'get_user_sess');
@@ -50,9 +50,8 @@ define('FB_VAR_APIKEY', 'fb_apikey'); // Deprecated.  Use FB_VAR_ID
 define('FB_VAR_ID', 'fb_id');
 define('FB_VAR_USE_COOKIE', 'fb_use_cookie');
 define('FB_VAR_USE_SESSION', 'fb_use_session');
-define('FB_VAR_JS_USE_SESSION', 'fb_js_use_session'); // Initialize JS with token from session.
+define('FB_VAR_JS_USE_SESSION', 'fb_js_session_token'); // Initialize JS with token from session.
 
-define('FB_VAR_JS_TEST_LOGIN_STATUS', 'fb_js_test_login_status'); // call FB.api during js init?
 define('FB_VAR_JS_GET_LOGIN_STATUS', 'fb_js_get_login_status'); // call FB.getLoginStatus during js init?
 define('FB_VAR_JS_OAUTH', 'fb_js_oauth'); // Whether to pass oauth: true to FB.init().
 
@@ -224,32 +223,6 @@ function fb_init() {
     //$fb_init_settings['apiKey'] = $_fb_app->apikey;
     $fb_init_settings['appId'] = $_fb_app->id;
 
-    if (isset($_REQUEST['destination'])) {
-      $destination = $_REQUEST['destination'];
-    }
-    elseif (current_path()) {
-      $destination = current_path();
-    }
-    else {
-      $destination = '<front>';
-    }
-    if (fb_is_canvas()) {
-      $destination = fb_scrub_urls($destination); // Needed?
-    }
-
-    //Stripping the fragment out to be tacked on during the javascript redirect
-    if (strpos($destination, '#') !== FALSE) {
-      list($destination, $fragment) = explode('#', $destination, 2);
-      fb_js_settings('reload_url_fragment', $fragment);
-    }
-
-    fb_js_settings('reload_url', url($destination, array(
-                                       'absolute' => TRUE,
-                                       'fb_canvas' => fb_is_canvas(),
-                                       'language' => (object) array('prefix' => NULL, 'language' => NULL), // http://drupal.org/node/1000452
-                                     )));
-    fb_js_settings('reload_url_append_hash', variable_get(FB_VAR_RELOAD_APPEND_HASH, FALSE));
-
     // Add perms to settings, for calling FB.login().
     $perms = array();
     drupal_alter('fb_required_perms', $perms);
@@ -278,23 +251,35 @@ function fb_init() {
 
       }
 
-      // This helps when third party cookies disabled.
-      //if (isset($_SESSION['_fb_' . $_fb_app->id]) && variable_get(FB_VAR_JS_USE_SESSION, FALSE)) {
-      if (variable_get(FB_VAR_JS_USE_SESSION, FALSE)) {
-        // @TODO also support the older session parameter, when oauth is false.
-        // Facebook and their damned undocumented data structures.
-        //$php_sr = $_fb->getSignedRequest();
-        if ($fb_uid = $_fb->getUser()) {
-          $fb_token = $_fb->getAccessToken();
+      if (!empty($_REQUEST['fb_reload'])) {
+        // Tell javascript not to reload indefinately.
+        fb_js_settings('fb_reloading', $_REQUEST['fb_reload']);
+      }
 
-          $js_sr = array(
-            'accessToken' => $fb_token,
-            'userID' => $fb_uid,
-            // It's unclear exactly which parts of the sr are needed.
-            //'signedRequest' => $_SESSION['_fb_' . $_fb_app->id],
-            //'expiresIn' => 6988, // ???
-          );
-          $fb_init_settings['authResponse'] = (object) $js_sr;
+      // When not using cookies, or third-party cookies disabled, we can pass all the auth details in javascript settings.
+      if (variable_get(FB_VAR_JS_USE_SESSION, TRUE)) {
+        if (!empty($_REQUEST['fb_login_status'])) {
+          // Remember for duration of session whether test failed.
+          $_SESSION['fb_get_login_status_test'] = $_REQUEST['fb_login_status'];
+        }
+        if ($fb_uid = $_fb->getUser()) {
+
+          if (!empty($_SESSION['fb_get_login_status_test']) &&
+              $_SESSION['fb_get_login_status_test'] == 'false') {
+            $fb_token = $_fb->getAccessToken();
+            // This uses a data structure not documented by facebook.  May not continue to work.
+            $js_sr = array(
+              'accessToken' => $fb_token,
+              'userID' => $fb_uid,
+              // It's unclear exactly which parts of the sr are needed.
+              //'signedRequest' => $_SESSION['_fb_' . $_fb_app->id],
+              //'expiresIn' => 6988, // ???
+            );
+            $fb_init_settings['authResponse'] = (object) $js_sr;
+          }
+        }
+        else {
+          fb_js_settings('get_login_status_test', TRUE);
         }
       }
 
@@ -303,6 +288,33 @@ function fb_init() {
       unset($_fb_app);
       watchdog('fb', "Could not initialize Facebook API.", array(), WATCHDOG_ERROR);
     }
+
+    if (isset($_REQUEST['destination'])) {
+      $destination = $_REQUEST['destination'];
+    }
+    elseif (current_path()) {
+      $destination = current_path();
+    }
+    else {
+      $destination = '<front>';
+    }
+
+    if (fb_is_canvas()) {
+      $destination = fb_scrub_urls($destination); // Needed?
+    }
+
+    //Stripping the fragment out to be tacked on during the javascript redirect
+    if (strpos($destination, '#') !== FALSE) {
+      list($destination, $fragment) = explode('#', $destination, 2);
+      fb_js_settings('reload_url_fragment', $fragment);
+    }
+
+    fb_js_settings('reload_url', url($destination, array(
+                                       'absolute' => TRUE,
+                                       'fb_canvas' => fb_is_canvas(),
+                                       'language' => (object) array('prefix' => NULL, 'language' => NULL), // http://drupal.org/node/1000452
+                                     )));
+    fb_js_settings('reload_url_append_hash', variable_get(FB_VAR_RELOAD_APPEND_HASH, FALSE));
   }
 
   if ($channel = variable_get(FB_VAR_JS_CHANNEL, TRUE)) {
@@ -319,7 +331,7 @@ function fb_init() {
   fb_invoke(FB_OP_POST_INIT, array('fb_app' => $_fb_app,
                                    'fb' => $_fb));
 
-  fb_js_settings('test_login_status', variable_get(FB_VAR_JS_TEST_LOGIN_STATUS, FALSE));
+  fb_js_settings('test_login_status', variable_get(FB_VAR_JS_USE_SESSION, TRUE));
   fb_js_settings('get_login_status', variable_get(FB_VAR_JS_GET_LOGIN_STATUS, TRUE));
 
   fb_js_settings('controls', implode(',', fb_controls()));
@@ -465,7 +477,8 @@ function fb_api_init($fb_app) {
 
     // Tell Drupal not to store the current page in the cache when user is logged into facebook.
     if (!user_is_logged_in() && fb_facebook_user($fb)) {
-      $GLOBALS['conf']['cache'] = 0;
+      //dpm("Disabling cache for connected user.", __FUNCTION__);
+      $GLOBALS['conf']['cache'] = CACHE_DISABLED;
     }
 
     return $fb;
@@ -932,8 +945,12 @@ function fb_api_check_session($fb) {
     if (fb_verbose()) {
       fb_log_exception($e, t("fb_api_check_session failed."));
     }
+    $app_id = $fb->getAppId();
 
-    unset($_SESSION['fb'][$fb->getAppId()]);
+    unset($_SESSION['fb'][$app_id]);
+    unset($_SESSION['_fb_' . $app_id]);
+    unset($_SESSION['_fb_token_' . $app_id]);
+
     // Unsetting the javasript fbu can be helpful when third-party cookies disabled.
     //fb_js_settings('fbu', 0); @TODO still needed? helpful?
 
@@ -946,13 +963,11 @@ function fb_api_check_session($fb) {
  * Helper to ensure local user is logged out, or an anonymous session is refreshed.
  */
 function _fb_logout() {
-  session_destroy();
-  $GLOBALS['user'] = drupal_anonymous_user();
-  drupal_session_initialize();
-
-  // Unsetting the javasript fbu can be helpful when third-party cookies disabled.
-  //fb_js_settings('fbu', 0); @TODO still needed?? helpful???
-
+  if (session_name()) { // Avoid PHP warning.
+    session_destroy();
+    $GLOBALS['user'] = drupal_anonymous_user();
+    drupal_session_initialize();
+  }
 }
 
 
@@ -1454,7 +1469,9 @@ function fb_permission() {
  * When completing a canvas page we need special processing for the session. See fb_session.inc.
  *
  * Also invoke hook_fb(FB_OP_EXIT), so that other modules can handle special
- * cases (in particular form support in b_canvas.module.
+ * cases (in particular form support in fb_canvas.module.
+ *
+ * TODO: remove this hook, for compatibility with Drupal's aggressive caching.  Modules that currently look for FB_OP_EXIT will need to implement hook_exit on their own.
  */
 function fb_exit($destination = NULL) {
   global $_fb_app, $_fb;
@@ -1793,6 +1810,7 @@ function fb_ajax_event($event_type) {
     }
     else {
       unset($_SESSION['_fb_' . $_fb_app->id]);
+      unset($_SESSION['_fb_token_' . $_fb_app->id]);
     }
 
     if ($_fb_app) {

@@ -36,7 +36,7 @@ FB_Canvas = function(){};
  * Called after Facebook javascript has initialized.  Global FB will be set.
  */
 FB_Canvas.setAutoResize = function() {
-  FB.Canvas.setAutoResize(true, 100); // time in ms, default 100.
+  FB.Canvas.setAutoGrow();
 };
 
 // click handler

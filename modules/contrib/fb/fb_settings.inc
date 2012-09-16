@@ -84,6 +84,7 @@ function _fb_settings_parse_signed_request($signed_request) {
 /**
  * Get the fb_settings from a parsed signed request.
  * http://developers.facebook.com/docs/authentication/canvas
+ * signed request will be found on canvas pages, and some connect pages and ajax callbacks.
  */
 function _fb_settings_honor_signed_request($sr) {
   if (isset($sr['page'])) {
@@ -105,7 +106,6 @@ function _fb_settings_honor_signed_request($sr) {
     }
   }
   elseif (isset($sr['user_id'])) {
-    // Probably a canvas page.
     fb_settings(FB_SETTINGS_FBU, $sr['user_id']);
   }
 
@@ -201,14 +201,13 @@ else {
 
 if (fb_settings(FB_SETTINGS_TYPE) &&
     fb_settings(FB_SETTINGS_TYPE) != FB_SETTINGS_TYPE_CONNECT) {
-  // Cookie domain unique to app and page type.
-  $unique_id = fb_settings(FB_SETTINGS_ID);
-  $cookie_domain = isset($cookie_domain) ? $cookie_domain : '' .
-    fb_settings(FB_SETTINGS_TYPE) . $unique_id;
+  // Cookie domain unique to app and page type, and fbu to detect logout when on canvas pages.
+  $unique_id = fb_settings(FB_SETTINGS_TYPE) . fb_settings(FB_SETTINGS_ID) . '_' . fb_settings(FB_SETTINGS_FBU);
+  $cookie_domain = isset($cookie_domain) ? $cookie_domain : $unique_id;
   fb_settings(FB_SETTINGS_COOKIE_DOMAIN, $cookie_domain); // for debugging.
 }
 
 if (fb_settings(FB_SETTINGS_FBU)) {
   // Tells Drupal, don't pull from (or save to) cache when logged into facebook.
-  $conf['cache'] = 0;
+  $conf['cache'] = 0; // CACHE_DISABLED == 0
 }

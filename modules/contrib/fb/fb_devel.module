@@ -287,12 +287,15 @@ function fb_devel_fb($op, $data, &$return) {
   }
 
   elseif ($op == FB_OP_POST_INIT) {
-    if (isset($_SESSION['fb_devel'])) {
-      // Counter helps track how long session has been around.
-      $_SESSION['fb_devel']['FB_OP_POST_INIT'] = $_SESSION['fb_devel']['FB_OP_POST_INIT'] + 1;
-    }
-    else {
-      $_SESSION['fb_devel']['FB_OP_POST_INIT'] = 1;
+    if (FALSE) { // TRUE to enable this test
+      // Placing a value in the session can help detect when session is persisted across pages.  But can also have subtle side effects.
+      if (isset($_SESSION['fb_devel'])) {
+        // Counter helps track how long session has been around.
+        $_SESSION['fb_devel']['FB_OP_POST_INIT'] = $_SESSION['fb_devel']['FB_OP_POST_INIT'] + 1;
+      }
+      else {
+        $_SESSION['fb_devel']['FB_OP_POST_INIT'] = 1;
+      }
     }
 
     // Javascript to help us with sanity checks.
@@ -642,7 +645,7 @@ function fb_devel_info() {
   $info['fb_app'] = $_fb_app;
   $info['session'] = $_SESSION;
   $info['cookies'] = $_COOKIE;
-
+  $info['cache'] = variable_get('cache', NULL);
 
   if ($_fb) {
     $info['signed_request'] = $_fb->getSignedRequest();

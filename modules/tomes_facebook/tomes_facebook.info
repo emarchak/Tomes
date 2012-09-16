@@ -1,0 +1,14 @@
+name = Tomes Facebook
+description = Facebook & social media config for Tomes
+core = 7.x
+package = Tomes
+php = 5.2.4
+version = 7.x-1.2
+project = tomes_pages
+dependencies[] = fb_app
+dependencies[] = fb_connect
+dependencies[] = fb_stream
+dependencies[] = fb
+dependencies[] = twitter_post
+dependencies[] = twitter
+dependencies[] = oauth_common

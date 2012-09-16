@@ -1,0 +1,56 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the the Tomes facebook profile.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ */
+function tomes_facebook_install() {
+
+  variable_set('fb_api_file', drupal_get_path('module', 'tomes_facebook') . '/facebook-php-sdk/src/facebook.php');
+
+  // Execute all module updates
+  $sandbox = array();
+  for ($i = 10000; $i < 10099; $i++){
+    $func = 'tomes_facebook_update_'.$i; // rename savvis to your module name
+    if (function_exists($func)){
+      $func($sandbox);
+    }
+  }
+
+}
+
+/**
+ * Impliments hook_update_n();
+ *
+ */
+function tomes_facebook_update_10001(&$sandbox) {
+  $app = array(
+    'label' => t('tomes'),
+    'apikey' => '274046809368011',
+    'id' => '274046809368011',
+    'secret' => '3f36a32b259794ecf5746d890c7281f5',
+    'fb_app_data' => array(
+      'fb_app' => array(
+        'set_app_props' => 1,
+      ),
+      'fb_connect' => array(
+        'primary' => 1,
+      ),
+    ),
+  );
+}
+
+/**
+ * Impliments hook_update_n();
+ *   Set user and target ID to tomes facebook page
+ */
+
+function tomes_facebook_update_10002(&$sandbox) {
+  variable_set('fb_message_target_id', '243051765795813');
+  variable_set('fb_message_user_id', '243051765795813');
+  return t('Set user and target ID to tomes facebook page');
+}

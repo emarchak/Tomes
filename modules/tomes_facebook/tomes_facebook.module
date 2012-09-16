@@ -1,0 +1,195 @@
+<?php
+/**
+ * @file
+ * Code for the Tomes facebook feature.
+ */
+
+/**
+ * Impliments hook_permission();
+ */
+function tomes_facebook_permission() {
+  return array(
+    'post to facebook' => array(
+      'title' => t('Send Posts to Facebook page'),
+      'description' => t('Allows a user to post to facebook whens saving nodes'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Impliments hook_menu();
+ * for admin paths
+ */
+
+function tomes_facebook_menu() {
+
+	$items['admin/config/services/post_to_facebook'] = array(
+  	'title' => t('Post to facebook'),
+  	'description' => t('Set which content types to push to Facebook'),
+  	'page callback' => 'drupal_get_form',
+    'page arguments' => array('tomes_facebook_admin'),
+  	'access arguments' => array('access administration pages')
+	);
+
+	return $items;
+}
+
+
+/**
+ * Custom callback for facebook admin
+ */
+function tomes_facebook_admin() {
+  $form = array();
+	$form['fb_settings']['fb_message_target_id'] = array(
+  	'#type' => 'textfield',
+  	'#title' => t('Page/Wall ID (target_id)'),
+  	'#description' => t('Leave blank if you wish to post to your own personal wall, otherwise, place your Page ID here to post to that page\'s wall.'),
+  	'#default_value' => variable_get('fb_message_target_id', array()),
+	);
+
+	$form['fb_settings']['fb_message_user_id'] = array(
+  	'#type' => 'textfield',
+  	'#title' => t('Admin ID (user_id)'),
+  	'#description' => t('Leave blank if you wish to post as yourself, otherwise, place your Page ID here to post as the admin of that page.'),
+  	'#default_value' => variable_get('fb_message_user_id', array()),
+	);
+
+	$form['fb_settings']['fb_message_default'] = array(
+  	'#type' => 'textfield',
+  	'#title' => t('Default format string'),
+  	'#description' => t('The given text will be posted as the user comment/message to Facebook unless you overwrite a specific one in the individual post form.'),
+  	'#default_value' => variable_get('fb_message_default', 'Upcoming news!'),
+	);
+
+  $content_options = array();
+  $content_types = node_type_get_types();
+  foreach($content_types as $machine_name => $type) {
+    $content_options[$machine_name] = $type->name;
+  }
+
+	$form['fb_settings']['fb_message_content_types'] = array(
+  	'#type' => 'checkboxes',
+  	'#title' => t('Allowed content types'),
+  	'#description' => t('Constrain which content types must be posted to facebook.'),
+  	'#options' => $content_options,
+  	'#default_value' => variable_get('fb_message_content_types', array(NULL)),
+	);
+  $form['#submit'][] = 'tomes_facebook_admin_submit';
+
+	return  system_settings_form($form);
+
+}
+
+/**
+ * Form submit function for tomes_facebook_admin()
+ */
+function tomes_facebook_admin_submit($form, $form_state) {
+  variable_set('fb_message_content_types', $form_state['values']['fb_message_content_types']);
+}
+
+/**
+ * Impliments hook_form_FORMID_alter();
+ */
+function tomes_facebook_form_page_node_form_alter(&$form, &$form_state) {
+  $node = &$form_state['node'];
+  $fb_content_type = variable_get('fb_message_content_types', array($node->type => TRUE)) ;
+  global $base_url;
+
+  //check if user has access and this content type is allowed
+  if (user_access('post to facebook') && $fb_content_type[$node->type]) {
+    // Create a form to post on facebook
+  	$form['fb_wall_post'] = array(
+    	'#type' => 'fieldset',
+    	'#title' => t('Post to Facebook'),
+    	'#group' => 'additional_settings',
+    	'#weight' => -5,
+  	);
+  	// Add checkbox to control feed publish.
+  	$form['fb_wall_post']['fb_publish'] = array(
+    	'#type' => 'checkbox',
+    	'#title' => 'Share on Facebook',
+    	'#default_value' => FALSE,
+    	'#description' => t('Will repost link on facebook'),
+  	);
+  	//allow a box for post message
+  	$form['fb_wall_post']['fb_message'] = array(
+    	'#type' => 'textarea',
+    	'#title' => t('Facebook Post Message'),
+    	'#size' => 30,
+    	'#maxlength' => 255,
+    	'#description' => t('Enter a short description for the post'),
+    	'#default_value' => variable_get('fb_message_default', 'Upcoming news!'),
+  	);
+
+  	//by default, publish option pre-enabled when creating new nodes
+    if (!isset($node->nid) || isset($node->is_new)) {
+      $form['fb_wall_post']['fb_publish']['#default_value'] = TRUE;
+      unset($form['fb_wall_post']['fb_publish']['#description']);
+    }
+  }
+}
+
+/**
+ * Impliments hook_node_presave();
+ *
+ * Sends post to facebook using fb_stream_publish_dialog
+ * using an array with the following keys:
+ *   - 'user_message'
+ *   - 'attachment'
+ *   - 'action_links'
+ *   - 'target_id'
+ *   - 'user_message_prompt'
+ *   - 'auto_publish'
+ *   - 'actor_id'
+ */
+function tomes_facebook_node_presave($node) {
+
+  //if the user has chosen to post to facebook and has perms
+	if (isset($node->fb_publish) && $node->fb_publish && user_access('post to facebook')) {
+	  module_load_include('module', 'fb_stream');
+    global $user;
+
+    $post = array();
+    $attachment = array();
+    $action_links = array();
+
+  	$attachment = array(
+  		'name' => $node->title,
+  		'href' => url('node/' . $node->nid, array('absolute' => TRUE)),
+  		'description' => $node->body['und']['0']['value'],
+    );
+    //load the image if avalible
+    if (!empty($node->field_image['und'])) {
+    	$image = file_load($node->field_image['und']['0']['fid']);
+  		$attachment['media'][] = array(
+				'type' => "image",
+				'src' => 	file_create_url($image->uri),
+				'href' => url('node/' . $node->nid, array('absolute' => TRUE)),
+			);
+  	}
+
+  	$action_links[] = array(
+    	'text' => t('Read More'),
+    	'href' => url('node/'.$node->nid, array('absolute' => TRUE)),
+  	);
+
+  	$target_id = variable_get('fb_message_target_id', FALSE) ? variable_get('fb_message_target_id') : fb_facebook_user();
+  	$actor_id = variable_get('fb_message_user_id', FALSE) ? variable_get('fb_message_user_id') : fb_facebook_user();
+
+  	$post = array(
+      'user_message' => strip_tags($node->fb_message),
+      'action_links' => json_encode($action_links),
+      'attachment' => json_encode($attachment),
+      'target_id' => $target_id,
+      'actor_id' => $actor_id,
+      'auto_publish' => TRUE,
+    );
+
+    fb_stream_publish_dialog($post);
+
+    watchdog('tomes_facebook', '%user posted to %fb_target as facebook user %fb_actor', array('%user' => $user->name , '%fb_target' => $target_id, '%fb_actor' => $actor_id), WATCHDOG_NOTICE, NULL);
+	}
+
+
+}

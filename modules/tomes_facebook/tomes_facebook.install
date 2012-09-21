@@ -15,7 +15,7 @@ function tomes_facebook_install() {
   // Execute all module updates
   $sandbox = array();
   for ($i = 10000; $i < 10099; $i++){
-    $func = 'tomes_facebook_update_'.$i; // rename savvis to your module name
+    $func = 'tomes_facebook_update_'.$i;
     if (function_exists($func)){
       $func($sandbox);
     }
@@ -25,11 +25,14 @@ function tomes_facebook_install() {
 
 /**
  * Impliments hook_update_n();
- *
+ *  Creates tomes fb app
  */
 function tomes_facebook_update_10001(&$sandbox) {
-  $app = array(
+  module_load_include('inc', 'fb_app', 'fb_app.admin');
+
+  $tomes = array(
     'label' => t('tomes'),
+    'status' => 1,
     'apikey' => '274046809368011',
     'id' => '274046809368011',
     'secret' => '3f36a32b259794ecf5746d890c7281f5',
@@ -42,15 +45,77 @@ function tomes_facebook_update_10001(&$sandbox) {
       ),
     ),
   );
+
+  $fb_app = array(
+    'values' => $tomes,
+  );
+
+  drupal_form_submit('fb_app_edit_form', $fb_app);
+  return t('Created Tomes fb app');
 }
 
 /**
  * Impliments hook_update_n();
  *   Set user and target ID to tomes facebook page
  */
-
 function tomes_facebook_update_10002(&$sandbox) {
   variable_set('fb_message_target_id', '243051765795813');
   variable_set('fb_message_user_id', '243051765795813');
   return t('Set user and target ID to tomes facebook page');
+}
+
+/**
+ * Impliments hook_update_n();
+ *   Set post types for facebook and twitter
+ */
+
+function tomes_facebook_update_10003(&$sandbox) {
+  variable_set('fb_message_content_types', array('page' => 'page', 'event' => 'event'));
+  variable_set('twitter_post_types', array('page' => 'page', 'event' => 'event'));
+  variable_set('twitter_consumer_key', 'utii5JHT0VX36eqoYPaLA');
+  variable_set('twitter_consumer_secret', 'KlAQj69DS2noVj77Gt6FlRd0tfpeEBn6zJLmvN4q1E');
+
+  return t('Set post types for facebook and twitter');
+}
+
+
+
+
+/**
+ * Impliments hook_update_n();
+ *   Place blocks in right regions
+ */
+
+function tomes_facebook_update_10004(&$sandbox) {
+
+ $blocks = array(
+    'facebook' => array(
+      'module' => 'tomes_facebook',
+      'delta' => 'fb_like',
+      'status' => '1',
+      'weight' => '0',
+      'region' => 'four_first',
+    ),
+    'social' => array(
+      'module' => 'tomes_pages',
+      'delta' => 'social_media',
+      'status' => '1',
+      'weight' => '-0',
+      'region' => 'four_fourth',
+    ),
+  );
+
+  foreach ($blocks as $block) {
+    $query = db_update('block')
+      ->condition('module', $block['module'])
+      ->condition('delta', $block['delta'])
+      ->condition('theme', 'tomes')
+      ->fields(array(
+          'region' => $block['region'],
+          'status' => $block['status'],
+          'weight' => $block['weight'],
+        ))
+      ->execute();
+  }
+  return t('Placed blocks in right regions');
 }

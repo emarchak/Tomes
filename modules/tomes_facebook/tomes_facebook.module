@@ -185,11 +185,50 @@ function tomes_facebook_node_presave($node) {
       'actor_id' => $actor_id,
       'auto_publish' => TRUE,
     );
-
     fb_stream_publish_dialog($post);
 
     watchdog('tomes_facebook', '%user posted to %fb_target as facebook user %fb_actor', array('%user' => $user->name , '%fb_target' => $target_id, '%fb_actor' => $actor_id), WATCHDOG_NOTICE, NULL);
 	}
-
-
 }
+
+/**
+ * Implimentation of hook_block_info()
+ */
+function tomes_facebook_block_info(){
+  $blocks = array();
+  $blocks['fb_like'] = array(
+    'info' => t('Facebook Like Button'),
+
+  );
+  return $blocks;
+}
+
+/**
+ * Implimentation of hook_block()
+ */
+function tomes_facebook_block_view($delta){
+  $block = array();
+
+  switch ($delta) {
+    case 'fb_like':
+      global $base_url;
+      $vars['base_url'] = $base_url;
+
+      $block['subject'] = NULL;
+      $block['content'] = array();
+
+
+      $fb_page = variable_get('fb_message_target_id', NULL);
+      if (!is_null($fb_page)) {
+        $fb_json = drupal_http_request('http://www.facebook.com/' . $fb_page);
+        $block['content']['#markup'] = '<fb:like href="'. $fb_json->redirect_url . '" data-width="350"></fb:like>';
+      }
+      else {
+        $block['content'] = '<fb:like href="' . $base_url . '" data-width="300"></fb:like>';
+      }
+    break;
+  }
+
+ return $block;
+}
+

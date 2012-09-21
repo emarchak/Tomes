@@ -53,12 +53,12 @@
   #menu-bar {
     position:absolute;
     top:0;
-    left:163px; /* width of logo*/
-    padding: 0 2px;
+    width:100%;
   }
   #menu-bar .block {
     clear: both;
     float: none;
+    margin-left:163px; /* width of logo*/
   }
   #menu-bar .menu-wrapper ul li {
     display: block;
@@ -143,12 +143,12 @@
   #menu-bar {
     position:absolute;
     top:0;
-    left:163px; /* width of logo*/
-    padding: 0 2px;
+    width:100%;
   }
   #menu-bar .block {
     clear: both;
     float: none;
+    margin-left:163px; /* width of logo*/
   }
   #menu-bar .menu-wrapper ul li {
     display: block;
@@ -181,9 +181,17 @@
   .article-title {
     font-size: 1.5em;
   }
+  .view-id-players ul li {
+    float:left;
+    width: 46%;
+  }
+
+  .view-id-players ul li:nth-child(even) {
+    margin-left: 2%;
+  }
 }
 /**
- * Tablet portrait 
+ * Tablet portrait
  * - menu in narrow format
  */
 @media only screen and (min-width:481px) and (max-width:768px) {
@@ -245,12 +253,12 @@
   #menu-bar {
     position:absolute;
     top:0;
-    left:163px; /* width of logo*/
-    padding: 0 2px;
+    width:100%;
   }
   #menu-bar .block {
     clear: both;
     float: none;
+    margin-left:163px; /* width of logo*/
   }
   #menu-bar .menu-wrapper ul.menu li {
     display: block;
@@ -286,14 +294,22 @@
     position:relative;
     left:-5%;
   }
+  .view-id-players ul li {
+    float:left;
+    width: 46%;
+  }
+
+  .view-id-players ul li:nth-child(even) {
+    margin-left: 2%;
+  }
 }
 /**
- * Tablet landscape 
+ * Tablet landscape
  * - menu in wide format
  */
 @media only screen and (min-width:769px) and (max-width:1024px) {
   #header {
-    height:80px; 
+    height:80px;
     margin-bottom:160px;
   }
   .container {
@@ -343,9 +359,18 @@
     position:relative;
     left:-5%;
   }
+    .view-id-players ul li {
+    float:left;
+    width: 30%;
+  }
+
+  .view-id-players ul li:nth-child(3n+2) {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
 }
-/** 
- * Standard layout 
+/**
+ * Standard layout
  *  - menu in wide format
  */
 @media only screen and (min-width:1025px) {
@@ -362,7 +387,7 @@
   #menu-bar{
     width: 50%;
     left: 50%;
-    margin-left: -25%; 
+    margin-left: -25%;
     top: 0;
     position: absolute;
   }
@@ -389,5 +414,14 @@
     width: 110%;
     position:relative;
     left:-5%;
+  }
+  .view-id-players ul li {
+    float:left;
+    width: 30%;
+  }
+
+  .view-id-players ul li:nth-child(3n+2) {
+    margin-left: 2%;
+    margin-right: 2%;
   }
 }

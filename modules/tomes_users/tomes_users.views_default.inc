@@ -31,12 +31,36 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '10';
-  $handler->display->display_options['style_plugin'] = 'grid';
-  $handler->display->display_options['style_options']['columns'] = '3';
-  $handler->display->display_options['style_options']['fill_single_line'] = 0;
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['style_options']['wrapper_class'] = '';
   $handler->display->display_options['row_plugin'] = 'fields';
   $handler->display->display_options['row_options']['hide_empty'] = 1;
-  $handler->display->display_options['row_options']['default_field_elements'] = 1;
+  $handler->display->display_options['row_options']['default_field_elements'] = 0;
+  /* Field: User: Uid */
+  $handler->display->display_options['fields']['uid']['id'] = 'uid';
+  $handler->display->display_options['fields']['uid']['table'] = 'users';
+  $handler->display->display_options['fields']['uid']['field'] = 'uid';
+  $handler->display->display_options['fields']['uid']['label'] = '';
+  $handler->display->display_options['fields']['uid']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['uid']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['absolute'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['external'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['replace_spaces'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['nl2br'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['word_boundary'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['uid']['alter']['more_link'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['strip_tags'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['trim'] = 0;
+  $handler->display->display_options['fields']['uid']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['uid']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['uid']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['uid']['hide_empty'] = 0;
+  $handler->display->display_options['fields']['uid']['empty_zero'] = 0;
+  $handler->display->display_options['fields']['uid']['hide_alter_empty'] = 1;
+  $handler->display->display_options['fields']['uid']['link_to_user'] = 0;
   /* Field: User: Picture */
   $handler->display->display_options['fields']['picture']['id'] = 'picture';
   $handler->display->display_options['fields']['picture']['table'] = 'users';
@@ -44,6 +68,7 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['fields']['picture']['label'] = '';
   $handler->display->display_options['fields']['picture']['alter']['alter_text'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['picture']['alter']['path'] = '#uid-[uid]';
   $handler->display->display_options['fields']['picture']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['external'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['replace_spaces'] = 0;
@@ -51,11 +76,13 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['fields']['picture']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['picture']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['picture']['alter']['more_link'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['strip_tags'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['trim'] = 0;
   $handler->display->display_options['fields']['picture']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['picture']['element_type'] = '0';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['picture']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['picture']['element_default_classes'] = 0;
   $handler->display->display_options['fields']['picture']['hide_empty'] = 0;
   $handler->display->display_options['fields']['picture']['empty_zero'] = 0;
   $handler->display->display_options['fields']['picture']['hide_alter_empty'] = 1;
@@ -67,19 +94,24 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['fields']['field_name']['field'] = 'field_name';
   $handler->display->display_options['fields']['field_name']['label'] = '';
   $handler->display->display_options['fields']['field_name']['alter']['alter_text'] = 0;
-  $handler->display->display_options['fields']['field_name']['alter']['make_link'] = 0;
+  $handler->display->display_options['fields']['field_name']['alter']['make_link'] = 1;
+  $handler->display->display_options['fields']['field_name']['alter']['path'] = '#uid-[uid]';
   $handler->display->display_options['fields']['field_name']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['external'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['replace_spaces'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['trim_whitespace'] = 0;
+  $handler->display->display_options['fields']['field_name']['alter']['link_class'] = 'lightbox';
   $handler->display->display_options['fields']['field_name']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['field_name']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_name']['alter']['more_link'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['strip_tags'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['trim'] = 0;
   $handler->display->display_options['fields']['field_name']['alter']['html'] = 0;
   $handler->display->display_options['fields']['field_name']['element_type'] = 'h2';
+  $handler->display->display_options['fields']['field_name']['element_label_type'] = '0';
   $handler->display->display_options['fields']['field_name']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_name']['element_wrapper_type'] = '0';
   $handler->display->display_options['fields']['field_name']['element_default_classes'] = 0;
   $handler->display->display_options['fields']['field_name']['hide_empty'] = 0;
   $handler->display->display_options['fields']['field_name']['empty_zero'] = 0;
@@ -91,8 +123,8 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['fields']['field_bio']['table'] = 'field_data_field_bio';
   $handler->display->display_options['fields']['field_bio']['field'] = 'field_bio';
   $handler->display->display_options['fields']['field_bio']['label'] = '';
-  $handler->display->display_options['fields']['field_bio']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['field_bio']['alter']['alter_text'] = 0;
+  $handler->display->display_options['fields']['field_bio']['alter']['alter_text'] = 1;
+  $handler->display->display_options['fields']['field_bio']['alter']['text'] = '<div class="biography lightbox_popup" id="uid-[uid]">[field_bio]</div>';
   $handler->display->display_options['fields']['field_bio']['alter']['make_link'] = 0;
   $handler->display->display_options['fields']['field_bio']['alter']['absolute'] = 0;
   $handler->display->display_options['fields']['field_bio']['alter']['external'] = 0;
@@ -101,11 +133,13 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['fields']['field_bio']['alter']['nl2br'] = 0;
   $handler->display->display_options['fields']['field_bio']['alter']['word_boundary'] = 1;
   $handler->display->display_options['fields']['field_bio']['alter']['ellipsis'] = 1;
+  $handler->display->display_options['fields']['field_bio']['alter']['more_link'] = 0;
   $handler->display->display_options['fields']['field_bio']['alter']['strip_tags'] = 0;
   $handler->display->display_options['fields']['field_bio']['alter']['trim'] = 0;
   $handler->display->display_options['fields']['field_bio']['alter']['html'] = 0;
+  $handler->display->display_options['fields']['field_bio']['element_type'] = '0';
   $handler->display->display_options['fields']['field_bio']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_bio']['element_default_classes'] = 1;
+  $handler->display->display_options['fields']['field_bio']['element_default_classes'] = 0;
   $handler->display->display_options['fields']['field_bio']['hide_empty'] = 0;
   $handler->display->display_options['fields']['field_bio']['empty_zero'] = 0;
   $handler->display->display_options['fields']['field_bio']['hide_alter_empty'] = 1;
@@ -121,6 +155,11 @@ function tomes_users_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: User: Picture */
+  $handler->display->display_options['filters']['picture']['id'] = 'picture';
+  $handler->display->display_options['filters']['picture']['table'] = 'users';
+  $handler->display->display_options['filters']['picture']['field'] = 'picture';
+  $handler->display->display_options['filters']['picture']['value'] = '1';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');

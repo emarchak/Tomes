@@ -10,7 +10,7 @@
 function tomes_users_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'user-user-field_bio'
+  // Exported field: 'user-user-field_bio'.
   $fields['user-user-field_bio'] = array(
     'field_config' => array(
       'active' => '1',
@@ -31,6 +31,7 @@ function tomes_users_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(),
       'translatable' => '0',
@@ -70,7 +71,7 @@ function tomes_users_field_default_fields() {
     ),
   );
 
-  // Exported field: 'user-user-field_name'
+  // Exported field: 'user-user-field_name'.
   $fields['user-user-field_name'] = array(
     'field_config' => array(
       'active' => '1',
@@ -91,6 +92,7 @@ function tomes_users_field_default_fields() {
           0 => 'format',
         ),
       ),
+      'locked' => '0',
       'module' => 'text',
       'settings' => array(
         'max_length' => '255',

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @file
  * Install, update and uninstall functions for the the Tomes install profile.
@@ -36,18 +36,18 @@ function tomes_pages_update_10001(&$sandbox) {
   module_enable(array($default_theme));
   variable_set('theme_default', $default_theme);
   variable_set('admin_theme', $default_theme);
-  
+
    // Place blocks in specific region
   $values = array(
     array(
       'module' => 'system',
       'delta' => 'main-menu',
-      'region' => 'menu_bar',  
+      'region' => 'menu_bar',
     ),
     array(
       'module' => 'system',
       'delta' => 'main',
-      'region' => 'content',  
+      'region' => 'content',
     ),
 
   );
@@ -85,7 +85,7 @@ function tomes_pages_update_10001(&$sandbox) {
  */
 function tomes_pages_update_10002(&$sandbox) {
   module_enable(array('contact', 'pathauto'));
-  
+
   variable_set('social_media_facebook','http://facebook.com/tomesimprov');
   variable_set('social_media_twitter','http://twitter.com/tomesimprov');
   variable_set('social_media_mail', '/contact');
@@ -100,15 +100,15 @@ function tomes_pages_update_10002(&$sandbox) {
  * Implements hook_update_N().
  *   Set menu items
  */
-function tomes_pages_update_10016(&$sandbox) {
+function tomes_pages_update_10003(&$sandbox) {
 
   //generate the menu links array
   //for the header menu
 
   $menu_links = array();
-  
+
   $menu_links['shows'] = array(
-    'link_path' => '<front>',
+    'link_path' => 'shows',
     'link_title' => t('Shows'),
     'weight' => 1,
   );
@@ -128,4 +128,15 @@ function tomes_pages_update_10016(&$sandbox) {
   menu_cache_clear_all();
 
   return t('Set menu items');
+}
+
+/**
+ * Implements hook_update_N().
+ *   Sets front page
+ */
+function tomes_pages_update_10004(&$sandbox) {
+
+  variable_set('site_frontpage', 'front');
+
+  return t('Success! Set front page');
 }

@@ -10,7 +10,7 @@
 function tomes_users_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: access content
+  // Exported permission: access content.
   $permissions['access content'] = array(
     'name' => 'access content',
     'roles' => array(
@@ -20,7 +20,7 @@ function tomes_users_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: access content overview
+  // Exported permission: access content overview.
   $permissions['access content overview'] = array(
     'name' => 'access content overview',
     'roles' => array(
@@ -29,7 +29,7 @@ function tomes_users_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: access site-wide contact form
+  // Exported permission: access site-wide contact form.
   $permissions['access site-wide contact form'] = array(
     'name' => 'access site-wide contact form',
     'roles' => array(
@@ -39,7 +39,7 @@ function tomes_users_user_default_permissions() {
     'module' => 'contact',
   );
 
-  // Exported permission: access user profiles
+  // Exported permission: access user profiles.
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
     'roles' => array(
@@ -49,7 +49,7 @@ function tomes_users_user_default_permissions() {
     'module' => 'user',
   );
 
-  // Exported permission: add media from remote sources
+  // Exported permission: add media from remote sources.
   $permissions['add media from remote sources'] = array(
     'name' => 'add media from remote sources',
     'roles' => array(
@@ -58,13 +58,16 @@ function tomes_users_user_default_permissions() {
     'module' => 'media_internet',
   );
 
-  // Exported permission: administer content types
+  // Exported permission: administer content types.
   $permissions['administer content types'] = array(
     'name' => 'administer content types',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'administrator',
+    ),
+    'module' => 'node',
   );
 
-  // Exported permission: administer nodes
+  // Exported permission: administer nodes.
   $permissions['administer nodes'] = array(
     'name' => 'administer nodes',
     'roles' => array(
@@ -73,31 +76,37 @@ function tomes_users_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: administer users
+  // Exported permission: administer users.
   $permissions['administer users'] = array(
     'name' => 'administer users',
-    'roles' => array(),
+    'roles' => array(
+      0 => 'authenticated user',
+    ),
+    'module' => 'user',
   );
 
-  // Exported permission: administer views
+  // Exported permission: administer views.
   $permissions['administer views'] = array(
     'name' => 'administer views',
     'roles' => array(),
+    'module' => 'views',
   );
 
-  // Exported permission: bypass node access
+  // Exported permission: bypass node access.
   $permissions['bypass node access'] = array(
     'name' => 'bypass node access',
     'roles' => array(),
+    'module' => 'node',
   );
 
-  // Exported permission: cancel account
+  // Exported permission: cancel account.
   $permissions['cancel account'] = array(
     'name' => 'cancel account',
     'roles' => array(),
+    'module' => 'user',
   );
 
-  // Exported permission: change own username
+  // Exported permission: change own username.
   $permissions['change own username'] = array(
     'name' => 'change own username',
     'roles' => array(
@@ -106,7 +115,7 @@ function tomes_users_user_default_permissions() {
     'module' => 'user',
   );
 
-  // Exported permission: edit media
+  // Exported permission: edit media.
   $permissions['edit media'] = array(
     'name' => 'edit media',
     'roles' => array(
@@ -115,7 +124,7 @@ function tomes_users_user_default_permissions() {
     'module' => 'media',
   );
 
-  // Exported permission: import media
+  // Exported permission: import media.
   $permissions['import media'] = array(
     'name' => 'import media',
     'roles' => array(
@@ -124,13 +133,14 @@ function tomes_users_user_default_permissions() {
     'module' => 'media',
   );
 
-  // Exported permission: select account cancellation method
+  // Exported permission: select account cancellation method.
   $permissions['select account cancellation method'] = array(
     'name' => 'select account cancellation method',
     'roles' => array(),
+    'module' => 'user',
   );
 
-  // Exported permission: view media
+  // Exported permission: view media.
   $permissions['view media'] = array(
     'name' => 'view media',
     'roles' => array(

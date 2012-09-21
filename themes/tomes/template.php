@@ -22,7 +22,7 @@ function tomes_preprocess_html(&$vars) {
    //'tomes.responsive.gpanels.css'
   );
   load_subtheme_media_queries($media_queries_css, 'tomes');
- 
+
   //load typekit fonts
   drupal_add_js('//use.typekit.net/gqy7acr.js', array(
       'type' => 'external',
@@ -33,14 +33,20 @@ function tomes_preprocess_html(&$vars) {
       'type' => 'inline',
       'scope' => 'footer'
     ));
-  
+
   //kill the image classes
   $image_key = array_search('ia-r', $vars['classes_array']);
   if ($image_key) {
     unset($vars['classes_array'][$image_key]);
   }
-  
+
   $vars['classes'] = trim(implode(' ', $vars['classes_array']));
+
+  global $base_url;
+  $vars['base_url'] = $base_url;
+
+  $vars['site_name'] = variable_get('site_name', FALSE);
+  $vars['fb_user'] = variable_get('fb_message_user_id', FALSE);
 
  /**
   * Load IE specific stylesheets
@@ -61,14 +67,19 @@ function tomes_preprocess_html(&$vars) {
   );
   load_subtheme_ie_styles($ie_files, 'footheme'); // Replace 'footheme' with your themes name
   // */
+}
+
+/**
+ * Override or insert variables into the page templates.
+ *
+function tomes_preprocess_page(&$vars){
 
 }
 
-
-/** 
+/**
  * Override or inser variables into node templates.
  */
-   /* -- 
+   /* --
 function tomes_preprocess_node(&$vars) {
-} 
+}
 //*/

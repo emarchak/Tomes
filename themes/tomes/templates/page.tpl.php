@@ -6,12 +6,11 @@
 
 
       <?php print render($page['menu_bar']); ?>
-   
+
   </header>
-      <?php print render($page['header']); ?>  
+      <?php print render($page['header']); ?>
 <div id="page" class="container">
   <div id="columns"<?php print $page['menu_bar'] ? 'class="no-menu-bar"' : '' ;?>><div class="columns-inner clearfix">
-
     <?php print $messages; ?>
     <?php print render($page['help']); ?>
     <?php print render($page['secondary_content']); ?>
@@ -46,9 +45,9 @@
         <?php endif; ?>
         <?php print render($title_suffix); ?>
 
-        <div id="content"><?php print render($page['content']); ?></div>
-
-        <?php print $feed_icons; ?>
+        <div id="content">
+          <?php print render($page['content']); ?>
+        </div>
 
       </<?php print $tag; ?>>
 
@@ -65,7 +64,7 @@
   <?php if ($page['footer'] || $page['four_first'] || $page['four_second'] || $page['four_third'] || $page['four_fourth']): ?>
     <footer role="contentinfo">
       <?php if ($page['four_first'] || $page['four_second'] || $page['four_third'] || $page['four_fourth']): ?>
-        <div class="four-4x25 gpanel clearfix">
+        <div class="two-50 gpanel clearfix">
           <?php print render($page['four_first']); ?>
           <?php print render($page['four_second']); ?>
           <?php print render($page['four_third']); ?>

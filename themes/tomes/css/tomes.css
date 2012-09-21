@@ -44,7 +44,7 @@ body {
   background-color: transparent;
 }
 #menu-bar .menu-wrapper li a {
-  border-bottom-width:0;
+  border-bottom-width:0 !important;
 }
 
 #main-content > header {
@@ -55,7 +55,7 @@ body {
   text-align:center;
 }
 
-#columns, body {
+#columns, body, .lightbox_popup {
   background-color: #fcfcfc;
 }
 
@@ -63,9 +63,16 @@ block-inner, .breadcrumb, .region-help, .messages, #main-content > header, #attr
   margin-left: 20px;
   margin-right: 20px;
 }
-.fb_iframe_widget,
-.fb_iframe_widget span[style],
-.fb_iframe_widget iframe[style] {max-width: 100% !important;}
+
+/** fbml overrides */
+.fb-comments,
+.fb-comments span[style],
+.fb-comments iframe[style] {
+  min-width: 100% !important;
+  max-width: 100% !important;
+  margin-right: 0;
+  margin-left: 0
+}
 
 /* typography */
 h1 {
@@ -229,6 +236,23 @@ article > header {
   transform: skew(15deg) rotate(6deg);
 }
 
+.lightbox_popup {
+  top: 25% !important;
+  width: 30%;
+  padding: 2em;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -o-border-radius: 2px;
+    -ms-border-radius: 2px;
+  border-radius: 2px;
+    -moz-box-shadow: 1px 1px 3px #d3d3d3;
+    -webkit-box-shadow: 1px 1px 3px #d3d3d3;
+    -o-box-shadow: 1px 1px 3px #d3d3d3;
+    -ms-box-shadow: 1px 1px 3px #d3d3d3;
+  box-shadow: 1px 1px 3px #d3d3d3;
+
+}
+
 /* the players view */
 
 .view-id-players ul,
@@ -265,7 +289,6 @@ article > header {
 .view-id-players ul li h2 {
   position:absolute;
   background-color: rgba(0,0,0,0.5);
-  color: #ddd;
   border-top: 1px solid  rgba(0,0,0,0.8);
   width: 86%;
   height: 100%;
@@ -283,7 +306,10 @@ article > header {
     -ms-transform:rotate(3deg);
   transform:rotate(3deg);
 }
-
+.view-id-players ul li h2 a {
+  color: #ddd;
+}
 .view-id-players .biography {
   display:none;
 }
+

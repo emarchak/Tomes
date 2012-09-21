@@ -4,7 +4,7 @@
 
   <?php if(!$page): ?>
     <header class="clearfix<?php $user_picture ? print ' with-picture' : ''; ?>">
-      
+
       <?php print render($title_prefix); ?>
       <?php if ($title): ?>
         <h1<?php print $title_attributes; ?>>
@@ -12,7 +12,7 @@
         </h1>
       <?php endif; ?>
       <?php print render($title_suffix); ?>
- 
+
       <?php if ($display_submitted): ?>
         <div class="submitted"><?php print $submitted; ?></div>
       <?php endif; ?>
@@ -32,6 +32,7 @@
     <nav class="clearfix"><?php print $links; ?></nav>
   <?php endif; ?>
 
-  <?php print render($content['comments']); ?>
-
+  <?php if (!$teaser && $content['comments']): ?>
+    <div class="fb-comments" data-href="<?php print $node_url ?>"></div>
+  <?php endif; ?>
 </article>

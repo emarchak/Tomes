@@ -26,6 +26,7 @@
   stylesheets[all][] = css/colors.css
 
 ;----------// Scripts
+  scripts[] = js/jquery.lightbox_me.js
   scripts[] = js/theme.behaviors.js
 
 ;----------// Regions

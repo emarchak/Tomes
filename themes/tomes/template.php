@@ -86,7 +86,6 @@ function tomes_preprocess_page(&$vars){
     )
   );
 
-  dsm($vars);
 }
 
 /**

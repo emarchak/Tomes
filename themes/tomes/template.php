@@ -71,9 +71,22 @@ function tomes_preprocess_html(&$vars) {
 
 /**
  * Override or insert variables into the page templates.
- *
+ */
 function tomes_preprocess_page(&$vars){
+  global $base_url;
+  //fixed logo until we can sort this shit out
+  $theme_logo = $base_url . '/' . path_to_theme() . '/logo.png';
+  $vars['logo_alt_text'] = check_plain(variable_get('site_name', '')) . ' ' . t('logo');
+  $vars['logo_img'] = '<img src="' . check_url($theme_logo) . '" alt="' . $vars['logo_alt_text'] . '"/>';
+  $vars['linked_site_logo'] = l($vars['logo_img'], '<front>', array(
+    'attributes' => array(
+      'title' => t('Home page')
+    ),
+    'html' => TRUE,
+    )
+  );
 
+  dsm($vars);
 }
 
 /**

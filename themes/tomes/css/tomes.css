@@ -287,12 +287,13 @@ article > header {
 }
 
 .view-id-players ul li h2 {
+  font-size: 1.25em;
   position:absolute;
   background-color: rgba(0,0,0,0.5);
   border-top: 1px solid  rgba(0,0,0,0.8);
   width: 86%;
   height: 100%;
-  line-height:1.5em;
+  line-height:2em;
   padding: 0 7%;
     -webkit-transition: .5s ease-in-out;
     -moz-transition: .5s ease-in-out;

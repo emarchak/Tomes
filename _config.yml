@@ -1,4 +1,5 @@
-name: Your New Jekyll Site
+name: Tomes
+slogan: Fantasy novels improvised by people who will never read them.
 pygments: true
 
 exclude:  [ Gemfile, Gemfile.lock, Procfile, vendor, gems]

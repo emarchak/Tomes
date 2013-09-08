@@ -1,13 +1,26 @@
 ---
-layout: default
-title: Your New Jekyll Site
+layout: single
+title: About
 ---
+<h1 id="about">About</h1>
+<p>A young peasant is on a hero's journey, except the peasant is a dance prodigy. An evil wizard plots to conquer the world, but he's just trying to impress a blind date. Maybe a princess embarks on a legendary search for the perfect friendship bracelet? That can work.</p>
 
-<div id="home">
-  <h1>Blog Posts</h1>
+<p>These are Tomes; improvised adaptations of (the covers of) forgotten paperback fantasy novels, stories that will never be read or repeated. Seven brave, clever improvisers emerge from the darkness with a box full of books they have never read... and never will. An equally brave and clever audience member chooses one of these books. Then the entire book is performed live onstage before your very eyes!</p>
+
+<p>Every show is based on a different book and is a completely new adventure! It's thrilling, hilarious, and sometimes even accidentally accurate.</p>
+
+<h1 id="shows">Shows</h1>
   <ul class="posts">
-    {% for post in site.posts %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ post.url }}">{{ post.title }}</a></li>
+    {% for event in site.posts %}
+      {% if event.categories contains 'show' %}
+        <li>
+          <h2>{{ event.title }}</h2>
+          {{ event.content}}
+        </li>
+      {% endif %}
     {% endfor %}
   </ul>
-</div>
+
+<h1 id="press">Press</h1>
+
+<h1 id="contact">Contact</h1>

@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ page.title }}</title>
-        <meta name="viewport" content="width=device-width">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/css/styles.css">
+    <!--
 
-        <!-- syntax highlighting CSS -->
-        <link rel="stylesheet" href="/css/syntax.css">
+     oOOOOOOOOOOO                      ooOo
+    Oo   oOOOOOo                      OOOOOo
+    OOO   OO                         OO  OOO
+    OOOO  OO                         OOo OO
+          OO   OOo     oOo       oo  OOO
+          OO  OOOOo OOOOOOOOO  oOOOO  OOO
+          OO oO  OO OO OOo OO  OOOOO  oOOo
+          OO OO  OO OO oOo OO  OO OO   oOOo
+          OO OO  OO OO oOo OO  OOoo     oOOo
+          OO OO  OO OO oOo OO  OO     O  oOOO
+          OO oOO Oo OO oOo OO  OOo o Oo   oOO
+          OO  OOOO  OO oOo oOO OOOO oOo    oO
+          OO   o    o       o   o   oOO    oO
+          OO                         OOOo  O
+          o                           OOOOO
 
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="/css/main.css">
-
-    </head>
-    <body>
-
-        <div class="container">
-          <div class="site">
-            <div class="header">
-              <h1 class="title"><a href="/">{{ site.name }}</a></h1>
-              <a class="extra" href="/">home</a>
-            </div>
-
-                {{ content }}
-
-            <div class="footer">
-              <div class="contact">
-                <p>
-                  Your Name<br />
-                  What You Are<br />
-                  your@email.com
-                </p>
-              </div>
-              <div class="contact">
-                <p>
-                  <a href="http://github.com/yourusername/">github.com/yourusername</a><br />
-                  <a href="http://twitter.com/yourusername/">twitter.com/yourusername</a><br />
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> <!-- /container -->
-
-    </body>
-</html>
+    -->
+  </head>
+  <body>
+    <nav>
+      {% for page in site.pages %}
+        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+      {% endfor %}
+    </nav>
+    <header>
+      <h1 class="title">{{ site.name }}</h1>
+      <h2 class="subtitle">{{ site.slogan }}</h2>
+    </header>
+    <div class="content">
+      {{ content }}
+    </div>
+    <footer>
+      <small>
+        &copy; {{ site.time | date: '%Y' }} Illiterate Productions. <br/>
+        Built on <a href="http://jekyll.rb">Jekyll</a>
+      </small>
+    </footer>
+  </body>
+  </html>

@@ -1,0 +1,89 @@
+/**
+ * Styles for tomes
+ */
+
+@import 'compass';
+
+// !variables
+$color_background: #333;
+$color_text: #eee;
+$base_font: 16px;
+
+// !functions
+
+@function em($target, $context: $base_font) {
+  @if $target == 0 { @return 0 }
+  @return $target / $context + 0em;
+}
+
+// !globals
+
+body {
+  background: transparent image-url('bg-clouds.jpg') no-repeat fixed;
+  @include background-size(cover);
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 16px;
+  line-height: 2em;
+  margin: 0 0;
+  padding: 0 0;
+
+  > *,
+  > header > * {
+    margin: 0 auto;
+  }
+
+  > .content,
+  > .footer,
+  > header > * {
+    width: 30em;
+    max-width: 90%;
+  }
+
+  > header {
+    background: transparent image-url('bg-lightning.png') no-repeat scroll center top;
+    @include background-size(contain);
+    max-width: 100%;
+    padding-bottom: 1000px;
+    margin-bottom: -1000px;
+    text-align: center;
+    h1.title {
+      display: inline-block;
+      overflow:hidden;
+      text-indent: 100%;
+      height: 1063px;
+      width: 800px;
+      margin-bottom: -500px;
+      max-width: 100%;
+      @include background-size(contain);
+      background: transparent image-url('tomes-logo.png') no-repeat center center;
+    }
+  }
+
+
+  > footer {
+    background: transparent image-url('bg-mountains.png') no-repeat center bottom;
+    @include background-size(cover);
+  }
+}
+
+
+
+// !text
+* {
+  color: $color_text;
+  @include text-shadow;
+}
+ul {
+  margin-left:0;
+}
+
+li {
+  list-style: none;
+  margin-bottom: 2em;
+}
+
+#{headings()} {
+ margin-top: 0;
+}
+

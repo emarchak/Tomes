@@ -1,5 +1,13 @@
 name: Tomes
 slogan: Fantasy novels improvised by people who will never read them.
+
 pygments: true
 
-exclude:  [ Gemfile, Gemfile.lock, Procfile, vendor, gems]
+social:
+  twitter: http://twitter.com/tomesimprov
+  facebook:
+  tumblr: http://tomesimprov.tumblr.com
+
+exclude:  [ Gemfile, Gemfile.lock, Procfile, vendor, gems, config.rb, config.ru, Rakefile]
+
+

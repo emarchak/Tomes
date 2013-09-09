@@ -3,6 +3,9 @@
  */
 
 @import 'compass';
+@import url(http://fonts.googleapis.com/css?family=Dosis:500,600|Titillium+Web);
+//font-family: 'Dosis', sans-serif;
+//font-family: 'Titillium Web', sans-serif;
 
 // !variables
 $color_background: #333;
@@ -21,7 +24,7 @@ $base_font: 16px;
 body {
   background: transparent image-url('bg-clouds.jpg') no-repeat fixed;
   @include background-size(cover);
-  font-family: sans-serif;
+  font-family: 'Titillium Web', sans-serif;
   text-align: center;
   font-size: 16px;
   line-height: 2em;
@@ -41,29 +44,48 @@ body {
   }
 
   > header {
-    background: transparent image-url('bg-lightning.png') no-repeat scroll center top;
-    @include background-size(contain);
+    background: transparent image-url('bg-lightning.png') no-repeat scroll center bottom;
+    @include background-size(cover);
     max-width: 100%;
     padding-bottom: 1000px;
     margin-bottom: -1000px;
     text-align: center;
+
     h1.title {
       display: inline-block;
       overflow:hidden;
-      text-indent: 100%;
-      height: 1063px;
       width: 800px;
       margin-bottom: -500px;
       max-width: 100%;
-      @include background-size(contain);
-      background: transparent image-url('tomes-logo.png') no-repeat center center;
     }
+
+    nav {
+      li {
+        display: inline-block;
+        padding-right: 2em;
+        margin-bottom: 0;
+
+        a {
+          font-family: 'Dosis', sans-serif;
+          color:#1b1435;
+          text-decoration: none;
+          text-transform: capitalize;
+        }
+      }
+    }
+
   }
-
-
   > footer {
-    background: transparent image-url('bg-mountains.png') no-repeat center bottom;
+    background: transparent image-url('bg-mountains.png') no-repeat center top;
     @include background-size(cover);
+    min-height:30em;
+    width:100%;
+    display: table;
+    * {
+      display: table-cell;
+      vertical-align: bottom;
+      color: #000;
+    }
   }
 }
 
@@ -84,6 +106,7 @@ li {
 }
 
 #{headings()} {
- margin-top: 0;
+  margin-top: 0;
+  font-family: 'Dosis', sans-serif;
 }
 

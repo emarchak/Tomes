@@ -27,13 +27,13 @@
     -->
   </head>
   <body>
-    <nav>
-      {% for page in site.pages %}
-        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-      {% endfor %}
-    </nav>
     <header>
-      <h1 class="title">{{ site.name }}</h1>
+      <nav>
+        {% for page in site.pages %}
+          <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+      </nav>
+      <h1 class="title"><img src="/img/tomes-logo.png"/></h1>
       <h2 class="subtitle">{{ site.slogan }}</h2>
     </header>
     <div class="content">
@@ -41,7 +41,7 @@
     </div>
     <footer>
       <small>
-        &copy; {{ site.time | date: '%Y' }} Illiterate Productions. <br/>
+        &copy; {{ site.time | date: '%Y' }} Secretly Illiterate Productions.
         Built on <a href="http://jekyll.rb">Jekyll</a>
       </small>
     </footer>

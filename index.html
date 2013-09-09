@@ -1,6 +1,6 @@
 ---
-layout: single
-title: About
+layout: default
+title: Home
 ---
 <h1 id="about">About</h1>
 <p>A young peasant is on a hero's journey, except the peasant is a dance prodigy. An evil wizard plots to conquer the world, but he's just trying to impress a blind date. Maybe a princess embarks on a legendary search for the perfect friendship bracelet? That can work.</p>
@@ -9,18 +9,14 @@ title: About
 
 <p>Every show is based on a different book and is a completely new adventure! It's thrilling, hilarious, and sometimes even accidentally accurate.</p>
 
-<h1 id="shows">Shows</h1>
+<h1 id="shows">Uncoming Shows</h1>
   <ul class="posts">
+    {% capture today %}{{ 'now' | date "%d%m%Y"}} {% endcapture %}
     {% for event in site.posts %}
-      {% if event.categories contains 'show' %}
+      {% if event.categories contains 'show' and event.date > today %}
         <li>
           <h2>{{ event.title }}</h2>
-          {{ event.content}}
         </li>
       {% endif %}
     {% endfor %}
   </ul>
-
-<h1 id="press">Press</h1>
-
-<h1 id="contact">Contact</h1>

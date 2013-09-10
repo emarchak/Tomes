@@ -2,18 +2,23 @@
 /** Styles for tomes */
 body { background: transparent url('../img/bg-clouds.jpg?1374865445') no-repeat fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; font-family: 'Titillium Web', sans-serif; text-align: center; font-size: 16px; line-height: 2em; margin: 0 0; padding: 0 0; }
 body > *, body > header > * { margin: 0 auto; }
-body > .content, body > .footer, body > header > * { width: 30em; max-width: 90%; }
+body > .content, body > .footer, body > header > * { width: 40em; max-width: 90%; }
 body > header { background: transparent url('../img/bg-lightning.png?1378671700') no-repeat scroll center bottom; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; max-width: 100%; padding-bottom: 1000px; margin-bottom: -1000px; text-align: center; }
 body > header h1.title { display: inline-block; overflow: hidden; width: 800px; margin-bottom: -500px; max-width: 100%; }
+body > header .subtitle { margin-bottom: 2em; }
 body > header nav li { display: inline-block; padding-right: 2em; margin-bottom: 0; }
 body > header nav li a { font-family: 'Dosis', sans-serif; color: #1b1435; text-decoration: none; text-transform: capitalize; }
-body > footer { background: transparent url('../img/bg-mountains.png?1374877256') no-repeat center top; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; min-height: 30em; width: 100%; display: table; }
-body > footer * { display: table-cell; vertical-align: bottom; color: #000; }
+body > footer { background: transparent url('../img/bg-mountains.png?1374877256') no-repeat center top; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; min-height: 30em; width: 100%; margin-top: -200px; display: table; }
+body > footer > * { display: table-cell; vertical-align: bottom; color: #000; }
 
 * { color: #eeeeee; text-shadow: 0px 0px 1px #aaaaaa; }
 
 ul { margin-left: 0; }
+ul.unstyled { padding-left: 0; }
 
 li { list-style: none; margin-bottom: 2em; }
 
-h1, h2, h3, h4, h5, h6 { margin-top: 0; font-family: 'Dosis', sans-serif; }
+h1, h2, h3, h4, h5, h6 { margin-bottom: .5em; margin-top: 2em; font-family: 'Dosis', sans-serif; }
+
+article { background-color: rgba(0, 0, 0, 0.4); margin-bottom: 2em; padding: 1em 3em; text-align: left; -webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 0 20px; -moz-box-shadow: rgba(255, 255, 255, 0.1) 0 0 20px; box-shadow: rgba(255, 255, 255, 0.1) 0 0 20px; }
+article h1, article h2, article h3, article h4, article h5, article h6 { text-align: center; margin-top: 0.5em; }

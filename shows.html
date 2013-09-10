@@ -1,0 +1,12 @@
+---
+layout: default
+title: Shows
+---
+<h1 id="shows">Upcoming Shows</h1>
+  {% for event in site.posts %}
+    <article class="event">
+      <h2>{{ event.title }}</h2>
+      <p>{{ event.date | date: "%B %d, %Y" }} @ {{ event.location }}</p>
+      <p>{{ event.content }}</p>
+    </article>
+  {% endfor %}

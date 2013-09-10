@@ -39,7 +39,7 @@ body {
   > .content,
   > .footer,
   > header > * {
-    width: 30em;
+    width: 40em;
     max-width: 90%;
   }
 
@@ -57,6 +57,10 @@ body {
       width: 800px;
       margin-bottom: -500px;
       max-width: 100%;
+    }
+
+    .subtitle {
+      margin-bottom:2em;
     }
 
     nav {
@@ -80,8 +84,9 @@ body {
     @include background-size(cover);
     min-height:30em;
     width:100%;
+    margin-top: -200px;
     display: table;
-    * {
+    > * {
       display: table-cell;
       vertical-align: bottom;
       color: #000;
@@ -98,6 +103,9 @@ body {
 }
 ul {
   margin-left:0;
+  &.unstyled {
+    padding-left:0;
+  }
 }
 
 li {
@@ -106,7 +114,22 @@ li {
 }
 
 #{headings()} {
-  margin-top: 0;
+  margin-bottom: .5em;
+  margin-top: 2em;
   font-family: 'Dosis', sans-serif;
+}
+
+article {
+  background-color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 2em;
+  padding: 1em 3em;
+  text-align: left;
+  @include box-shadow(rgba(255, 255, 255, 0.1) 0 0 20px);
+
+  #{headings()} {
+   text-align: center;
+   margin-top: 0.5em
+  }
+
 }
 

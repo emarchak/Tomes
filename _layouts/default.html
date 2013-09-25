@@ -28,11 +28,19 @@
   </head>
   <body>
     <header>
-      <nav>
-        {% for page in site.pages %}
-          <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+      <nav><ul class="inline">
+        {% for nav in site.pages %}
+          {% if nav.group == 'nav' %}
+            {% if page.url == nav.url %}
+              <li class="active">
+            {% else %}
+              <li>
+            {% endif %}
+              <a href="{{ nav.url  | remove:'index.html'}}">{{ nav.title }}</a>
+            </li>
+          {% endif %}
         {% endfor %}
-      </nav>
+      </ul></nav>
       <h1 class="title"><img src="/img/tomes-logo.png"/></h1>
     </header>
     <div class="content">
@@ -40,8 +48,8 @@
     </div>
     <footer>
       <small>
+        <img class="logo" src="/img/tomes-mark.png"/><br/>
         &copy; {{ site.time | date: '%Y' }} Secretly Illiterate Productions.
-        Built on <a href="http://jekyll.rb">Jekyll</a>
       </small>
     </footer>
   </body>

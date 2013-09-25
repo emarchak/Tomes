@@ -48,15 +48,20 @@ body {
     @include background-size(cover);
     max-width: 100%;
     padding-bottom: 1000px;
-    margin-bottom: -1000px;
+    margin-bottom: -1050px;
     text-align: center;
 
     h1.title {
       display: inline-block;
       overflow:hidden;
       width: 800px;
-      margin-bottom: -500px;
+      margin-top: -30px;
       max-width: 100%;
+      img {
+        position:relative;
+        z-index: 50;
+        max-width: 100%;
+      }
     }
 
     .subtitle {
@@ -64,16 +69,29 @@ body {
     }
 
     nav {
-      li {
-        display: inline-block;
-        padding-right: 2em;
+      text-align: left;
+      @include box-shadow(rgba(255, 255, 255, 0.1) 0 0 20px);
+      ul.inline li {
         margin-bottom: 0;
+        padding-right: 0;
+        position: relative;
+        z-index: 100;
 
         a {
+          padding: 0 1em;
           font-family: 'Dosis', sans-serif;
           color:#1b1435;
           text-decoration: none;
           text-transform: capitalize;
+        }
+        &.active,
+        &:hover {
+          background-color: #000;
+          background-color: rgba(0, 0, 0, 0.3);
+          @include box-shadow(rgba(255, 255, 255, 0.1) 0 0 20px);
+          a {
+            color: #fff;
+          }
         }
       }
     }
@@ -103,8 +121,16 @@ body {
 }
 ul {
   margin-left:0;
+  padding-left:0;
   &.unstyled {
     padding-left:0;
+  }
+  &.inline {
+    margin-top: 0;
+    li {
+      display: inline-block;
+      padding-right: 2em;
+    }
   }
 }
 
@@ -113,23 +139,78 @@ li {
   margin-bottom: 2em;
 }
 
+p {
+  margin: 0 0 1em;
+}
+
 #{headings()} {
   margin-bottom: .5em;
   margin-top: 2em;
   font-family: 'Dosis', sans-serif;
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
+article, iframe {
+  margin-bottom: 2em;
+  @include box-shadow(rgba(255, 255, 255, 0.1) 0 0 20px);
+  max-width:100%;
+}
 article {
   background-color: rgba(0, 0, 0, 0.4);
-  margin-bottom: 2em;
   padding: 1em 3em;
-  text-align: left;
-  @include box-shadow(rgba(255, 255, 255, 0.1) 0 0 20px);
+  text-align: justify;
 
   #{headings()} {
-   text-align: center;
-   margin-top: 0.5em
+    width: 60%;
+    min-width: 10em;
+    text-align: center;
+    margin: .5em auto 1em;
   }
+}
 
+blockquote {
+  font-size: 1.5em;
+  margin: 2em 0 0 inherit;
+  p {
+   margin-bottom: 0;
+   margin-top: 0.5em;
+  }
+}
+.citation {
+  display: block;
+  text-align: right;
+  margin-top: -1em;
+  &:before {
+    content: "– ";
+  }
+}
+
+// !posts
+article {
+  &.event {
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+    &:last-of-kind {
+      border-bottom-width: 0;
+    }
+
+    #{headings()} {
+      margin: 0.25em 0 0;
+      width: auto;
+      text-align: left;
+    }
+
+    footer {
+      font-size:small;
+      line-height: 1.5em;
+      color: rgba(255, 255, 255, 0.5)
+    }
+  }
 }
 

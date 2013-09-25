@@ -1,13 +1,12 @@
 ---
 layout: default
-title: Shows
-permalink: shows/index.html
-group: nav
+title: Past Shows
+permalink: shows/past/index.html
 ---
 {% capture today %}{{ site.time | date: "%Y%j" }} {% endcapture %}
 {% for event in site.posts reversed %}
    {% capture eventdate %}{{ event.date | date: "%Y%j" }}{% endcapture %}
-   {% if  eventdate > today %}
+   {% if  eventdate < today %}
   <article class="event">
 
     {% if event.facebook %}
@@ -22,4 +21,4 @@ group: nav
 {% endif %}
 {% endfor %}
 
-<h2><a href="/shows/past/"><< Past Shows</a></h2>
+<h2><a href="/shows/">Future Shows >> </a></h2>

@@ -9,7 +9,7 @@ permalink: shows/past/index.html
    {% if  eventdate < today %}
   <article class="event">
 
-    {% if event.facebook %}
+    {% if event.facebook != empty %}
       <h2><a href="{{ event.facebook }}">{{ event.title }}</a></h2>
     {% else %}
       <h2><a href="{{ event.url }}">{{ event.title }}</a></h2>

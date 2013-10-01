@@ -11,12 +11,26 @@
 $color_background: #333;
 $color_text: #eee;
 $base_font: 16px;
+$break_point: 640px;
 
 // !functions
 
 @function em($target, $context: $base_font) {
   @if $target == 0 { @return 0 }
   @return $target / $context + 0em;
+}
+
+@mixin clearfix {
+    &:after, &:before {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+    & {
+        *zoom: 1;
+    }
 }
 
 // !globals
@@ -98,16 +112,21 @@ body {
 
   }
   > footer {
+    background-position: center top;
     background: transparent image-url('bg-mountains.png') no-repeat center top;
     @include background-size(cover);
-    min-height:30em;
+    min-height: 20em;
+    padding-top: 10em;
+    position: relative;
     width:100%;
-    margin-top: -200px;
     display: table;
     > * {
       display: table-cell;
       vertical-align: bottom;
       color: #000;
+    }
+    .logo {
+      height: 100px;
     }
   }
 }
@@ -162,7 +181,7 @@ article, iframe {
 }
 article {
   background-color: rgba(0, 0, 0, 0.4);
-  padding: 1em 3em;
+  padding: 1em 2em;
   text-align: justify;
 
   #{headings()} {
@@ -186,7 +205,7 @@ blockquote {
   text-align: right;
   margin-top: -1em;
   &:before {
-    content: "– ";
+    content: "&mdash; ";
   }
 }
 
@@ -195,6 +214,7 @@ article {
   &.event {
     margin-bottom: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    @include clearfix;
 
     &:last-of-kind {
       border-bottom-width: 0;
@@ -210,6 +230,21 @@ article {
       font-size:small;
       line-height: 1.5em;
       color: rgba(255, 255, 255, 0.5)
+    }
+
+    div.poster {
+      overflow: hidden;
+      @include background-size(cover);
+      background-position: center center;
+      height: em(150px);
+      @media (min-width: $break_point) {
+        float: left;
+        width: em(170px);
+        margin: em(12px) em(30px) em(12px) 0;
+      }
+      img.poster {
+        visibility: hidden;
+      }
     }
   }
 }

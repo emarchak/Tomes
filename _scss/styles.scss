@@ -211,7 +211,7 @@ blockquote {
 
 // !posts
 article {
-  &.event {
+  &.show {
     margin-bottom: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     @include clearfix;
@@ -242,9 +242,14 @@ article {
         width: em(170px);
         margin: em(12px) em(30px) em(12px) 0;
       }
-      img.poster {
+      img {
         visibility: hidden;
       }
+
+    }
+    img.poster {
+      width: 100%;
+      height: auto;
     }
   }
 }

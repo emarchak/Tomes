@@ -42,13 +42,14 @@ blockquote p { margin-bottom: 0; margin-top: 0.5em; }
 .citation { display: block; text-align: right; margin-top: -1em; }
 .citation:before { content: "&mdash; "; }
 
-article.event { margin-bottom: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
-article.event:after, article.event:before { content: ""; display: table; }
-article.event:after { clear: both; }
-article.event { *zoom: 1; }
-article.event:last-of-kind { border-bottom-width: 0; }
-article.event h1, article.event h2, article.event h3, article.event h4, article.event h5, article.event h6 { margin: 0.25em 0 0; width: auto; text-align: left; }
-article.event footer { font-size: small; line-height: 1.5em; color: rgba(255, 255, 255, 0.5); }
-article.event div.poster { overflow: hidden; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-position: center center; height: 9.375em; }
-@media (min-width: 640px) { article.event div.poster { float: left; width: 10.625em; margin: 0.75em 1.875em 0.75em 0; } }
-article.event div.poster img.poster { visibility: hidden; }
+article.show { margin-bottom: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+article.show:after, article.show:before { content: ""; display: table; }
+article.show:after { clear: both; }
+article.show { *zoom: 1; }
+article.show:last-of-kind { border-bottom-width: 0; }
+article.show h1, article.show h2, article.show h3, article.show h4, article.show h5, article.show h6 { margin: 0.25em 0 0; width: auto; text-align: left; }
+article.show footer { font-size: small; line-height: 1.5em; color: rgba(255, 255, 255, 0.5); }
+article.show div.poster { overflow: hidden; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover; background-position: center center; height: 9.375em; }
+@media (min-width: 640px) { article.show div.poster { float: left; width: 10.625em; margin: 0.75em 1.875em 0.75em 0; } }
+article.show div.poster img { visibility: hidden; }
+article.show img.poster { width: 100%; height: auto; }

@@ -1,10 +1,14 @@
 ---
 layout: default
 ---
-<article class="post">
-<header>
-<h2>{{ page.title }}</h2>
-<footer class="meta">{{ page.date | date_to_string }}</footer>
-</header>
-{{ content }}
+<article class="post {{ page.categories }}">
+  <h2>{{ page.title }}</h2>
+  <footer class="meta">
+    {{ page.date | date: "%B %d, %Y" }} {{ page.time }} @ {{ page.location }}
+    {% if page.facebook %} | <a href="{{ page.facebook }}">Facebook Event</a>{% endif %}
+    </footer>
+  {{ content }}
+    {% if page.poster %}
+  <img src="{{ page.poster }}" class="poster" alt="{{ page.title }}"/>
+  {% endif %}
 </article>

@@ -1,0 +1,28 @@
+---
+layout: default
+title: Past Shows
+permalink: show/past/index.html
+---
+{% capture today %}{{ site.time | date: "%Y%j" }} {% endcapture %}
+{% for show in site.posts reversed %}
+   {% capture eventdate %}{{ show.date | date: "%Y%j" }}{% endcapture %}
+   {% if  eventdate < today %}
+  <article class="{{ show.categories }}">
+    {% if show.poster %}
+      <div class="poster" style="background-image: url({{ show.poster }})">
+        <img src="{{ show.poster }}" class="poster" alt="{{ show.title }}"/>
+      </div>
+    {% endif %}
+    {% if show.facebook %}
+      <h2><a href="{{ show.facebook }}">{{ show.title }}</a></h2>
+    {% else %}
+      <h2><a href="{{ show.url }}">{{ show.title }}</a></h2>
+    {% endif %}
+
+    <footer>{{ show.date | date: "%B %d, %Y" }} {{ show.time }} @ {{ show.location }}</footer>
+    {{ show.content }}
+  </article>
+{% endif %}
+{% endfor %}
+
+<h2><a href="/show/">Future Shows >> </a></h2>

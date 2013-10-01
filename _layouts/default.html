@@ -30,14 +30,12 @@
   <body>
     <header>
       <nav><ul class="inline">
-        {% for nav in site.pages %}
+        {% for nav in site.pages | reverse %}
           {% if nav.group == 'nav' %}
             {% if page.url == nav.url %}
-              <li class="active">
-            {% else %}
-              <li>
-            {% endif %}
-              <a href="{{ nav.url  | remove:'index.html'}}">{{ nav.title }}</a>
+              <li class="active">{% else %}
+              <li>{% endif %}
+                <a href="{{ nav.url  | remove:'index.html'}}">{{ nav.title }}</a>
             </li>
           {% endif %}
         {% endfor %}

@@ -17,23 +17,23 @@ permalink: /index.html
 
 <h1 id="shows"><a href="/shows/">Upcoming Shows</a></h1>
   {% capture today %}{{ site.time | date: "%Y%j" }} {% endcapture %}
-  {% for event in site.posts reversed %}
-     {% capture eventdate %}{{ event.date | date: "%Y%j" }}{% endcapture %}
+  {% for show in site.posts reversed %}
+     {% capture eventdate %}{{ show.date | date: "%Y%j" }}{% endcapture %}
      {% if  eventdate > today %}
-      <article class="event">
+      <article class="{{ show.categories }}">
 
-      {% if event.poster != empty %}
-        <div class="poster" style="background-image: url({{ event.poster }})">
-          <img src="{{ event.poster }}" class="poster" alt="{{ event.title }}"/>
+      {% if show.poster %}
+        <div class="poster" style="background-image: url({{ show.poster }})">
+          <img src="{{ show.poster }}" alt="{{ show.title }}"/>
         </div>
       {% endif %}
-      {% if event.facebook != empty %}
-        <h2><a href="{{ event.facebook }}">{{ event.title }}</a></h2>
+      {% if show.facebook %}
+        <h2><a href="{{ show.facebook }}">{{ show.title }}</a></h2>
       {% else %}
-        <h2><a href="{{ event.url }}">{{ event.title }}</a></h2>
+        <h2><a href="{{ show.url }}">{{ show.title }}</a></h2>
       {% endif %}
-        <footer>{{ event.date | date: "%B %d, %Y" }} {{ event.time }} @ {{ event.location }}</footer>
-        {{ event.content }}
+        <footer>{{ show.date | date: "%B %d, %Y" }} {{ show.time }} @ {{ show.location }}</footer>
+        {{ show.content }}
 
       </article>
       {% endif %}

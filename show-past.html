@@ -4,7 +4,7 @@ title: Past Shows
 permalink: show/past/index.html
 ---
 {% capture today %}{{ site.time | date: "%Y%j" }} {% endcapture %}
-{% for show in site.posts reversed %}
+{% for show in site.posts %}
    {% capture eventdate %}{{ show.date | date: "%Y%j" }}{% endcapture %}
    {% if  eventdate < today %}
   <article class="{{ show.categories }}">
@@ -20,7 +20,11 @@ permalink: show/past/index.html
     {% endif %}
 
     <footer>{{ show.date | date: "%B %d, %Y" }} {{ show.time }} @ {{ show.location }}</footer>
-    {{ show.content }}
+    {% if show.slug %}
+      <p>{{show.slug}}</p>
+    {% else %}
+      {{ show.content }}
+    {% endif %}
   </article>
 {% endif %}
 {% endfor %}

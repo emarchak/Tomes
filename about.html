@@ -15,7 +15,7 @@ permalink: /index.html
   <p>Every show is based on a different book and is a completely new adventure! It's thrilling, hilarious, and sometimes even accidentally accurate.</p>
 </article>
 
-<h1 id="shows"><a href="/shows/">Upcoming Shows</a></h1>
+<h1 id="shows"><a href="/show/">Upcoming Shows</a></h1>
   {% capture today %}{{ site.time | date: "%Y%j" }} {% endcapture %}
   {% for show in site.posts reversed %}
      {% capture eventdate %}{{ show.date | date: "%Y%j" }}{% endcapture %}
@@ -33,7 +33,11 @@ permalink: /index.html
         <h2><a href="{{ show.url }}">{{ show.title }}</a></h2>
       {% endif %}
         <footer>{{ show.date | date: "%B %d, %Y" }} {{ show.time }} @ {{ show.location }}</footer>
+      {% if show.slug %}
+        <p>{{show.slug}}</p>
+      {% else %}
         {{ show.content }}
+      {% endif %}
 
       </article>
       {% endif %}

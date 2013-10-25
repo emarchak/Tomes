@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Show
+title: Shows
 permalink: show/index.html
 group: nav
 ---
@@ -21,7 +21,11 @@ group: nav
     {% endif %}
 
     <footer>{{ show.date | date: "%B %d, %Y" }} {{ show.time }} @ {{ show.location }}</footer>
-    {{ show.content }}
+    {% if show.slug %}
+      <p>{{show.slug}}</p>
+    {% else %}
+      {{ show.content }}
+    {% endif %}
   </article>
 {% endif %}
 {% endfor %}

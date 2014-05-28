@@ -2,6 +2,7 @@ name: Tomes
 slogan: Fantasy novels improvised by people who will never read them.
 permalink: pretty
 pygments: true
+markdown: kramdown
 
 social:
   twitter: http://twitter.com/tomesimprov

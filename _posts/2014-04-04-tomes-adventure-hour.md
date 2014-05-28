@@ -5,8 +5,8 @@ title: "Tomes Adventure Hour"
 location: "The Central"
 time: "7:00pm"
 poster: "https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-ash3/q71/1235451_400131326754522_685052477_n.jpg"
-facebook: "https://www.facebook.com/events/227021157500766/"
-slug: "A monthly high-fantasy romp, with special guests New Becky, Liz Johston and Jess Bryson."
+facebook: "https://www.facebook.com/events/600307420061437/"
+slug: "A monthly high-fantasy romp, with special guests Jess Beaulieu, Darcy & Bingley and Disco Taxi."
 ---
 
 "NNN ... a killer hook ... their geeky sleeve-worn enthusiasm shines through."
@@ -22,7 +22,7 @@ Tomes are improvised adaptations of (the covers of) forgotten paperback fantasy 
 
 Every show is based on a different book and is a completely new adventure! It's thrilling, hilarious, and sometimes even accidentally accurate.
 
-This month we've got an improv sandwich with improv filling for you! We love NEW BECKY and so will you, and we love LIZ JOHNSTON AND JESS BRYSON and so will you!
+This month we've got special guests Jess Beaulieu, Darcy & Bingley and Disco Taxi!
 
 The Tomes Adventure Hour
 7:00 PM on the first Friday of every month
